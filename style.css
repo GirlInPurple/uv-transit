@@ -1,0 +1,128 @@
+body,
+html {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Rubik", sans-serif;
+    font-size: 1.25em;
+    height: 110%;
+}
+
+*:before,
+*:after,
+body>* {
+    box-sizing: inherit;
+}
+
+body>* {
+    padding-left: 5%;
+    padding-right: 5%;
+    white-space: nowrap;
+}
+
+hr {
+    border: 1px solid #bababa;
+}
+
+.logo {
+    background-color: #1c1c1c;
+}
+
+.logo img {
+    width: 8%;
+    display: block;
+    max-width: 100%;
+    background-color: inherit;
+}
+
+input,
+textarea {
+    font-size: 1.0em;
+}
+
+.option {
+    background-color: #efefef;
+    padding: 10px;
+    margin: 15px 0;
+}
+
+ul.no-bullet li {
+    list-style-type: none;
+}
+
+div.sponsors img {
+    max-height: 100px;
+}
+
+.options,
+.output {
+    min-height: 50px;
+    width: 50%;
+}
+
+button,
+input {
+    margin: 1%;
+    padding: 0%;
+    font: inherit;
+    color: inherit;
+}
+
+select {
+    height: 2.0em;
+    margin: 1%;
+    padding: 0%;
+    color: inherit;
+}
+
+select.in-table {
+    width: 150px;
+}
+
+input[type="checkbox"],
+input[type="radio"] {
+    width: 1.0em;
+    height: 1.0em;
+}
+
+input[type="number"] {
+    width: 5em;
+}
+
+h1,
+h2,
+h3,
+p {
+    white-space: normal;
+}
+
+h2,
+h3 {
+    margin-bottom: 0%;
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+option.outpost {
+    background-color: rgb(128, 128, 255);
+}
+
+option.outpost:hover {
+    background-color: rgb(200, 200, 255);
+}
+
+option.old-spawn {
+    background-color: rgb(255, 128, 128);
+}
+
+option.old-spawn:hover {
+    background-color: rgb(255, 200, 200);
+}
+
+option.new-spawn {
+    background-color: rgb(255, 255, 128);
+}
+
+option.new-spawn:hover {
+    background-color: rgb(255, 255, 200);
+}
