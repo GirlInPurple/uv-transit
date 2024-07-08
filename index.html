@@ -17,73 +17,91 @@
 
 <body>
     <div class="logo"><img src="416.png"></div>
-    <div>
-        <h1>UltraVanilla Transit Router</h1>
-
-        <p>
-            This page is meant to help players, old and new, get around the server and visit other locations.
-            UVDOT, along with the OPC, Seacrestica Transports, and more, are in the process of creating transit
-            infrastructure across the server, currently spanning just over 100KM!
-            <br>
-            More info on the transit system at large can be found <a href="/">here</a>, and a tutorial on how to use this
-            page can be viewed <a href="/">here</a>. For technical info, head to the uvweb Github repository and read the
-            uv-transit <a href="https://github.com/GirlInPurple/uv-transit/blob/master/README.md">readme.md</a> file.
-            <br>
-        </p>
-
-        <div class="options">
-            <table style="width: 320px;">
-                <tbody>
-                    <tr>
-                        <td><select name="from" id="from" class="in-table">
-                                <option value=undefined>Pick a location...</option>
-                            </select></td>
-                        <td>- From</td>
-                        <td rowspan="2">
-                            <button onclick="flipSelections()">Swap</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><select name="to" id="to" class="in-table">
-                                <option value=undefined>Pick a location...</option>
-                            </select></td>
-                        <td>- To</td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <select name="method" id="method" class="in-table" onchange="checkRouter(this.value)">
-                                <option value="fastest-route">Fastest Route</option>
-                                <option value="least-transfers">Least Transfers</option>
-                                <option value="scenic">Longest Route</option>
-                            </select>
-                        </td>
-                        <td colspan="2">- Routing Method</td>
-                    </tr>
-                </tbody>
-            </table>
-            <input disabled type="number" placeholder="10" name="scenic-loops" id="scenic-loops"><label
-                for="scenic-loops">Scenic Loops</label><br>
-            <input type="checkbox" name="use-warps" id="use-warps"><label for="use-warps">Use Warp Commands</label><br>
-            <input type="checkbox" checked name="use-nether" id="use-nether"><label for="use-nether">Use
-                Nether</label><br>
-            <input type="checkbox" checked name="use-iceways" id="use-iceways"><label for="use-iceways">Use
-                Iceways</label><br>
-            <input type="checkbox" checked name="use-pistonbolt" id="use-pistonbolt"><label for="use-pistonbolt">Use
-                Pistonbolts</label><br>
-            <input type="checkbox" checked name="use-minecarts" id="use-minecarts"><label for="use-minecarts">Use
-                Minecarts</label><br>
-            <input type="checkbox" name="use-boatways" id="use-boatways"><label for="use-boatways">Use
-                Boatways/Waterways</label><br>
-            <input onchange="toggleRelatedElement('roads-as')" type="checkbox" checked name="use-roadways"
-                id="use-roadways"><label for="use-roadways">Use Roadways</label><br>
-            <input type="number" placeholder="10" name="roads-as" id="roads-as"><label for="roads-as">Road Speed
-                (m/s)</label><br>
-            <button disabled onclick="route()">Route!</button>
+    <div class="content">
+        <div class="container">
+            <div>
+                <h1>UltraVanilla Transit Router</h1>
+                <noscript>You need to enable Javascript to run the router!</noscript>
+                <p>
+                    This page is meant to help players, old and new, get around the server and visit other locations.
+                    UVDOT, along with the OPC (working on <a href="https://wiki.ultravanilla.world/wiki/Outpost_Express">OPE</a>), 
+                    <a href="https://niklas20114552.github.io/st-transports/">Seacrestica Transports</a> (working on UltraStar), and more, 
+                    are in the process of creating transit infrastructure across the server, currently spanning just over 100KM!
+                    <br>
+                    More info on the transit system at large can be found <a href="/">here</a>, and a tutorial on how to use this
+                    page can be viewed <a href="/">here</a>. For technical info, head to the Github repository and read the
+                    uv-transit <a href="https://github.com/GirlInPurple/uv-transit/blob/master/README.md">readme.md</a> file.
+                    <br>
+                    <span>
+                        Version 1.0.1, Last Updated <abbr title="July 8th 2024, 02:47 EST/USA East">08/07/2024</abbr><br>
+                    </span>
+                </p>
+            </div>
         </div>
-        <div class="output">
-            <h2>Route</h2>
-            <div id="route-out">
-                <p id="status-injection"></p>
+        <div class="container">
+            <div class="options">
+                <table style="width: 320px;">
+                    <tbody>
+                        <tr>
+                            <td><select name="from" id="from" class="in-table">
+                                    <option value=undefined>Pick a location...</option>
+                                </select></td>
+                            <td>- From</td>
+                            <td rowspan="2">
+                                <button id="flip-button">Swap</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><select name="to" id="to" class="in-table">
+                                    <option value=undefined>Pick a location...</option>
+                                </select></td>
+                            <td>- To</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="margin">
+                    <details><summary>Toll Preferences</summary>
+                        <select name="tolls" id="tolls" class="in-table" style="width: max-content;">
+                            <option value="no-preference">Do not reroute to avoid them</option>
+                            <option selected value="unless-necessary">Avoid tolls unless absolutely necessary</option>
+                            <option value="avoid-tolls">Avoid tolls, period.</option>
+                        </select>
+                        <p class="small">Even if the option to avoid tolls is set, the options below override it.</p>
+                        <input type="checkbox" name="have-SeaCard" id="have-seacard"><label for="have-seacard">I have a ST SeaCard</label><br>
+                        <input type="checkbox" name="have-EasyPass" id="have-seacard"><label for="have-seacard">I have a UVDOT EasyPass</label><br>
+                    </details>
+                    <details><summary>Routing Preferences</summary>
+                        <input type="checkbox" checked name="use-warps" id="use-warps"><label for="use-warps">Use Warp Commands</label><br>
+                        <input type="checkbox" checked name="use-nether" id="use-nether"><label for="use-nether">Use Nether</label><br>
+                        <input type="checkbox" checked name="use-iceways" id="use-iceways"><label for="use-iceways">Use Iceways</label><br>
+                        <input type="checkbox" checked name="use-pistonbolt" id="use-pistonbolt"><label for="use-pistonbolt">Use Pistonbolts</label><br>
+                        <input type="checkbox" checked name="use-minecarts" id="use-minecarts"><label for="use-minecarts">Use Minecarts</label><br>
+                        <input type="checkbox" checked name="use-boatways" id="use-boatways"><label for="use-boatways">Use Boatways/Waterways</label><br>
+                        <input type="checkbox" checked name="use-roadways" id="use-roadways"><label for="use-roadways">Use Roadways</label><br>
+                        <input type="number" placeholder="10" name="roads-as" id="roads-as"><label for="roads-as">Road Speed (m/s)</label><br>
+                    </details>
+                    <details><summary>Experimental</summary>
+                        <p class="small">
+                            Check this option if you have a large crowd going to a single location. 
+                            This blocks the use of certain train stations and nether highways that make cause traffic jams or be too slow if too many people use it at once.
+                        </p>
+                        <input type="checkbox" name="large-crowd" id="large-crowd"><label for="large-crowd">I have a Large Crowd</label><br>
+                        <p class="small">
+                            Warps commands like /warp olympics are still active long after the event is over. 
+                            This option enables some warp commands that may or may not be disabled by the time you use them.
+                        </p>
+                        <input type="checkbox" name="use-seasonal" id="use-seasonal"><label for="use-seasonal">Use Seasonal Commands</label><br>
+                        <p class="small">
+                            It may take me a while to update this router with new locations and methods of transit, so I've preemptively added some of the ongoing projects into the router, like UltraStar and OPE, so this router can be used in the future without having to continuously update it.
+                            Please note that this enables <i>every</i> unfinished project into the network, so this can completely break the router and get you stuck in a random location on certain routes.
+                        </p>
+                        <input type="checkbox" name="use-incomplete" id="use-incomplete"><label for="use-incomplete">Enable Incomplete Routes</label><br>
+                    </details>
+                    <div class="container">
+                        <button id="route-button">Route!</button>
+                        <p style="font-size: 75%; padding: 0%; margin: 0%;">(or press Enter)</p>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="container">
