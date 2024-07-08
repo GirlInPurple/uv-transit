@@ -6,468 +6,570 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UltraVanilla Transit Router</title>
     <link href="style.css" rel="stylesheet">
+    <link href="416.png" rel="icon">
     <meta property="og:image" content="416.png">
     <meta property="og:title" content="UltraVanilla Transit Router">
     <meta name="description" content="Figure out how to get around, fast!">
     <meta property="og:description" content="Figure out how to get around, fast!">
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
-        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script type="text/javascript" src="./data.js"></script>
 </head>
 
 <body>
     <div class="logo"><img src="416.png"></div>
-    <div>
-        <h1>UltraVanilla Transit Router</h1>
-
-        <p>
-            This page is meant to help players, old and new, get around the server and visit other locations.
-            UVDOT, along with the OPC, Seacrestia Transports, and more, are in the process of creating transit
-            infrastructure across the server, currently spanning just over 100KM!
-            <br>
-            More info on the transit system at large can be found <a href="/">here</a>, and a tutorial on how to use this
-            page can be viewed <a href="/">here</a>. For technical info, head to the uvweb Github repository and read the
-            uv-transit <a href="https://github.com/GirlInPurple/uv-transit/blob/main/README.md">readme.md</a> file.
-            <br>
-        </p>
-
-        <div class="options">
-            <table style="width: 320px;">
-                <tbody>
-                    <tr>
-                        <td><select name="from" id="from" class="in-table">
-                                <option value=undefined>Pick a location...</option>
-                            </select></td>
-                        <td>- From</td>
-                        <td rowspan="2">
-                            <button onclick="flipSelections()">Swap</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><select name="to" id="to" class="in-table">
-                                <option value=undefined>Pick a location...</option>
-                            </select></td>
-                        <td>- To</td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <select name="method" id="method" class="in-table" onchange="checkRouter(this.value)">
-                                <option value="fastest-route">Fastest Route</option>
-                                <option value="least-transfers">Least Transfers</option>
-                                <option value="scenic">Longest Route</option>
-                            </select>
-                        </td>
-                        <td colspan="2">- Routing Method</td>
-                    </tr>
-                </tbody>
-            </table>
-            <input disabled type="number" placeholder="10" name="scenic-loops" id="scenic-loops"><label
-                for="scenic-loops">Scenic Loops</label><br>
-            <input type="checkbox" name="use-warps" id="use-warps"><label for="use-warps">Use Warp Commands</label><br>
-            <input type="checkbox" checked name="use-nether" id="use-nether"><label for="use-nether">Use
-                Nether</label><br>
-            <input type="checkbox" checked name="use-iceways" id="use-iceways"><label for="use-iceways">Use
-                Iceways</label><br>
-            <input type="checkbox" checked name="use-pistonbolt" id="use-pistonbolt"><label for="use-pistonbolt">Use
-                Pistonbolts</label><br>
-            <input type="checkbox" checked name="use-minecarts" id="use-minecarts"><label for="use-minecarts">Use
-                Minecarts</label><br>
-            <input type="checkbox" name="use-boatways" id="use-boatways"><label for="use-boatways">Use
-                Boatways/Waterways</label><br>
-            <input onchange="toggleRelatedElement('roads-as')" type="checkbox" checked name="use-roadways"
-                id="use-roadways"><label for="use-roadways">Use Roadways</label><br>
-            <input type="number" placeholder="10" name="roads-as" id="roads-as"><label for="roads-as">Road Speed
-                (m/s)</label><br>
-            <button disabled onclick="route()">Route!</button>
-        </div>
-        <div class="output">
-            <h2>Route</h2>
-            <div id="route-out">
-                <p id="status-injection"></p>
+    <div class="content">
+        <div class="container">
+            <div>
+                <h1>UltraVanilla Transit Router</h1>
+                <noscript>You need to enable Javascript to run the router!</noscript>
+                <p>
+                    This page is meant to help players, old and new, get around the server and visit other locations.
+                    UVDOT, along with the OPC (working on <a href="https://wiki.ultravanilla.world/wiki/Outpost_Express">OPE</a>), <a href="https://niklas20114552.github.io/st-transports/">Seascrestia Transports</a> (working on UltraStar), and more, are in the process of creating transit
+                    infrastructure across the server, currently spanning just over 100KM!
+                    <br>
+                    More info on the transit system at large can be found <a href="/">here</a>, and a tutorial on how to use this
+                    page can be viewed <a href="/">here</a>. For technical info, head to the Github repository and read the
+                    uv-transit <a href="https://github.com/GirlInPurple/uv-transit/blob/main/README.md">readme.md</a> file.
+                    <br>
+                    <span>
+                        Version 1.0.1, Last Updated <abbr title="July 8th 2024, 02:47 EST/USA East">08/07/2024</abbr><br>
+                    </span>
+                </p>
             </div>
-            <details style="display: none;" id="nerds">
-                <summary>Stats for nerds</summary>
-                <span id="compile-time"></span><br>
-                <span id="route-time"></span><br>
-                <span id="render-time"></span><br>
-                <span id="graph-length"></span><br>
-            </details>
+        </div>
+        <div class="container">
+            <div class="options">
+                <table style="width: 320px;">
+                    <tbody>
+                        <tr>
+                            <td><select name="from" id="from" class="in-table">
+                                    <option value=undefined>Pick a location...</option>
+                                </select></td>
+                            <td>- From</td>
+                            <td rowspan="2">
+                                <button id="flip-button">Swap</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><select name="to" id="to" class="in-table">
+                                    <option value=undefined>Pick a location...</option>
+                                </select></td>
+                            <td>- To</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="margin">
+                    <details><summary>Toll Preferences</summary>
+                        <select name="tolls" id="tolls" class="in-table" style="width: max-content;">
+                            <option value="no-preference">Do not reroute to avoid them</option>
+                            <option selected value="unless-necessary">Avoid tolls unless absolutely necessary</option>
+                            <option value="avoid-tolls">Avoid tolls, period.</option>
+                        </select>
+                        <p class="small">Even if the option to avoid tolls is set, the options below override it.</p>
+                        <input type="checkbox" name="have-SeaCard" id="have-seacard"><label for="have-seacard">I have a ST SeaCard</label><br>
+                        <input type="checkbox" name="have-EasyPass" id="have-seacard"><label for="have-seacard">I have a UVDOT EasyPass</label><br>
+                    </details>
+                    <details><summary>Routing Preferences</summary>
+                        <input type="checkbox" checked name="use-warps" id="use-warps"><label for="use-warps">Use Warp Commands</label><br>
+                        <input type="checkbox" checked name="use-nether" id="use-nether"><label for="use-nether">Use Nether</label><br>
+                        <input type="checkbox" checked name="use-iceways" id="use-iceways"><label for="use-iceways">Use Iceways</label><br>
+                        <input type="checkbox" checked name="use-pistonbolt" id="use-pistonbolt"><label for="use-pistonbolt">Use Pistonbolts</label><br>
+                        <input type="checkbox" checked name="use-minecarts" id="use-minecarts"><label for="use-minecarts">Use Minecarts</label><br>
+                        <input type="checkbox" checked name="use-boatways" id="use-boatways"><label for="use-boatways">Use Boatways/Waterways</label><br>
+                        <input type="checkbox" checked name="use-roadways" id="use-roadways"><label for="use-roadways">Use Roadways</label><br>
+                        <input type="number" placeholder="10" name="roads-as" id="roads-as"><label for="roads-as">Road Speed (m/s)</label><br>
+                    </details>
+                    <details><summary>Experimental</summary>
+                        <p class="small">
+                            Check this option if you have a large crowd going to a single location. 
+                            This blocks the use of certain train stations and nether highways that make cause traffic jams or be too slow if too many people use it at once.
+                        </p>
+                        <input type="checkbox" name="large-crowd" id="large-crowd"><label for="large-crowd">I have a Large Crowd</label><br>
+                        <p class="small">
+                            Warps commands like /warp olympics are still active long after the event is over. 
+                            This option enables some warp commands that may or may not be disabled by the time you use them.
+                        </p>
+                        <input type="checkbox" name="use-seasonal" id="use-seasonal"><label for="use-seasonal">Use Seasonal Commands</label><br>
+                        <p class="small">
+                            It may take me a while to update this router with new locations and methods of transit, so I've preemptively added some of the ongoing projects into the router, like UltraStar and OPE, so this router can be used in the future without having to continuously update it.
+                            Please note that this enables <i>every</i> unfinished project into the network, so this can completely break the router and get you stuck in a random location on certain routes.
+                        </p>
+                        <input type="checkbox" name="use-incomplete" id="use-incomplete"><label for="use-incomplete">Enable Incomplete Routes</label><br>
+                    </details>
+                    <div class="container">
+                        <button id="route-button">Route!</button>
+                        <p style="font-size: 75%; padding: 0%; margin: 0%;">(or press Enter)</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="output">
+                <p class="status-injection" id="status-injection"></p>
+                <br>
+                <p class="status-injection" id="output-injection"></p>
+                <details style="display: none;" id="nerds">
+                    <summary>Stats for nerds</summary>
+                    <span id="compile-time"></span><br>
+                    <span id="route-time"></span><br>
+                    <span id="render-time"></span><br>
+                    <span id="graph-length"></span><br>
+                </details>
+            </div>
+        </div>
+    </div>
+    <div class="logo">
+        <div class="container footer">
+            <p>
+                This site is not associated with the higher ups at UltraVanilla, nor Minecraft, Mojang, or Microsoft. 
+                All in-game towns, groups, or other locations mentioned are also their own entity and reserve the right to ask to be added or removed from this page.
+                Please open a Github issue or contact DJzombiehunter in-game to have your town/group/location added/removed/modified.
+                Also, this site is <a style="color:cornflowerblue;" href="https://github.com/GirlInPurple/uv-transit">open-source</a>.
+            </p>
         </div>
     </div>
     <script>
-
-        /*
-        (most) of the major places/towns in the world.
-        Add towns in Alphabetical order, underscores "_" are disallowed, and keep capitalization in mind!
-        This list is copy-pasted from the wiki: https://wiki.ultravanilla.world/wiki/Category:Settlement
-        */
-        let places = {
-            "Abyssal Caverns": "unknown",
-            "Amanita": "unknown",
-            "Aquileia": "outpost",
-            "Aurora": "old-spawn",
-            "Banal-Witchita": "outpost",
-            "Birch Island": "unknown",
-            "Borealis": "new-spawn",
-            "Burzum": "old-spawn",
-            "Cara Island": "old-spawn",
-            "Cara Nova": "unknown",
-            "Cloud City": "unknown",
-            "Colex": "unknown",
-            "Condor's Nest": "unknown",
-            "Cyprus": "unknown",
-            "Darkshire": "unknown",
-            "Dìxià Chéng": "unknown",
-            "Eden": "outpost",
-            "Ekilorea": "outpost",
-            "Enchanted Isles": "unknown",
-            "Evergreen": "outpost",
-            "Freedom City": "new-spawn",
-            "Frogtopia": "outpost",
-            "Gold Spur": "unknown",
-            "Hana Reservoir": "old-spawn",
-            "HoboNation": "unknown",
-            "Illyria": "outpost",
-            "Krill Lanka": "unknown",
-            "Liria": "unknown",
-            "Malbork": "unknown",
-            "Malus": "unknown",
-            "Mercy": "old-spawn",
-            "Merk Town": "unknown",
-            "Naval Detroit": "old-spawn",
-            "New Spawn": "new-spawn",
-            "Old Mann": "old-spawn",
-            "Old Spawn": "old-spawn",
-            "Outpost": "outpost",
-            "Pagasa City": "outpost",
-            "Primitown": "unknown",
-            "Rotherhythe": "outpost",
-            "STEAMEDHAMS": "unknown",
-            "Scintilla": "unknown",
-            "Seacrestica": "outpost",
-            "Siberia": "unknown",
-            "Sin City": "unknown",
-            "Sky Temple": "new-spawn",
-            "Solitude": "unknown",
-            "Southern Hollow": "old-spawn",
-            "Spanish Settlements": "new-spawn",
-            "Steambolt": "outpost",
-            "Stonehelm": "outpost",
-            "Tegridy": "outpost",
-            "Terni": "old-spawn",
-            "Terra": "outpost",
-            "The Swamp": "old-spawn",
-            "Totemia": "unknown",
-            "Tumtfjöll": "unknown",
-            "Valhalla": "unknown",
-            "Vault 11": "new-spawn",
-            "Vault 17": "old-spawn",
-            "Waterthorn": "old-spawn",
-            "WestHaven": "old-spawn",
-            "Willichburg": "unknown",
-            "Wolven": "old-spawn",
-        }
-
-        // The routing data, a mess of nested spaghetti
-        const routes = {
-            "Outpost": [
-                [-1890757, -1894551],
-                {
-                    roads: {
-                        "UV-OP-201 UV-OP-2 Intersection": [["UV-OP-2", 1.2]],
-
-                        "Evergreen": [["UV-OP-2", 1.2]],
-                        "Stonehelm": [["UV-OP-2", 1.2]],
-                    },
-                    railways: {
-                        "Seascrestia": [["Ultrastar", 1.2]],
-                        "Evergreen": [["Ultrastar", 1.2]],
-                    },
-                    iceways: {
-                        "Illyria": [["OPE Ouest", 1.2]]
-                    },
-                },
-            ],
-            "UV-OP-201 UV-OP-2 Intersection": [
-                [-1890757, -1894551],
-                {
-                    roads: {
-                        "UV-OP-203 UV-OP-2 Intersection": [["UV-OP-2", 1.2]],
-
-                        "Evergreen": [["UV-OP-201", 1.2]],
-                        "Outpost": [["UV-OP-2", 1.2]],
-                    },
-                },
-            ],
-            "UV-OP-203 UV-OP-2 Intersection": [
-                [-1890757, -1894551],
-                {
-                    roads: {
-                        "UV-OP-201 UV-OP-2 Intersection": [["UV-OP-2", 1.2]],
-
-                        "Illyria": [["UV-OP-2", 1.2]],
-                        "Pagasa City": [["UV-OP-203", 1.2]],
-                    },
-                },
-            ],
-            "Pagasa City": [
-                [-1890757, -1894551],
-                {
-                    roads: {
-                        "UV-OP-203 UV-OP-2 Intersection": [["UV-OP-203", 1.2]],
-                    },
-                    railways: {
-                        "Seascrestia": [["Ultrastar", 1.2]],
-                        "Illyria": [["Ultrastar", 1.2]]
-                    },
-                },
-            ],
-            "Illyria": [
-                [-1890757, -1894551],
-                {
-                    roads: {
-                        "UV_OP_2_Node_1": [["UV-OP-203", 1.2]],
-                    },
-                    railways: {
-                        "Pagasa City": [["Ultrastar", 1.2]]
-                    },
-                    iceways: {
-                        "Outpost": [["OPE Ouest", 1.2]]
-                    },
-                },
-            ],
-        };
-
-        let statusInjection
-
-        $(document).ready(() => {
-            // Then fills the To/From selectors
+        
+        jQuery(() => {
+            // Dropdowns
             [$("#from"), $("#to")].forEach((ele) => {
                 for (townName in places) {
                     ele.append('<option class="' + places[townName] + '" value="' + townName + '">' + townName + '</option>')
                 }
             })
-            // Set the global status value
-            statusInjection = $("#status-injection").get()[0]
-            // Add the status to the Route section
-            statusInjection.textContent = "No route has been calculated yet";
+            // Toggle for if Roadways are on
+            $("#use-roadways").on("change", () => {
+                let ele = $("#roads-as")
+                if (ele.attr("disabled") == null) {
+                    ele.attr("disabled", true)
+                } else {
+                    ele.attr("disabled")
+                }
+            })
+            // Flip the to-from selections
+            $("#flip-button").on("click", () => {
+                let from = $("#from").val()
+                let to = $("#to").val()
+                $("#from").val(to)
+                $("#to").val(from)
+            })
+            // If Pressed, route()
+            $("#route-button").on("click", () => {
+                route()
+            })
+            // If Enter, route()
+            $(this).on("keypress", (event) => {
+                if (event.key === "Enter") {
+                    route()
+                }
+            })
+            // Set boilerplate status text
+            $("#status-injection").text("No route has been calculated yet")
         })
 
-        const processRoutingGraph = (
-            useWarps,
-            useNether,
-            useIceway,
-            usePistonbolt,
-            useMinecart,
-            useBoatway,
-            useRoadway
-        ) => {
-            function nether(dist) { return dist * 8 }
-            const methods = {
-                iceway: 72.73, // Boat go zoom
-                road: ($("#roads-as").val() === "") ? 10 : parseFloat($("#roads-as").val()),
-                minecart: 8, // Maximum speed of a minecart
-                boat: 8, // Maximum speed of a boat
-            }
-            console.debug("method values: ", methods)
+        const route = () => {
 
-            let outputNodeGraph = {}
-            for (node in routes) {
-                let nodeRoutes = {}
+            const getSpeeds = () => {
+                return {
+                    iceways: 70, // Boat go zoom
+                    pistonbolts: 50, // Estimated speed of a well built pistonbolt. May need adjusting
+                    railways: 8, // Maximum speed of a minecart
+                    boatways: 8, // Maximum speed of a boat
+                    roadways: ($("#roads-as").val() === "") ? 10 : parseFloat($("#roads-as").val()),
+                    walkway: 7, // Speed of walking, also the speed used by Tolls
+                }
+            } 
 
-                // Lightest weight last
-                if (useWarps) {
-                    nodeRoutes["Outpost"] = 1;
-                    nodeRoutes["New Spawn"] = 1;
-                    nodeRoutes["Old Spawn"] = 1;
+            const compileRoutingGraph = (
+                tollMode,
+                useWarps,
+                useNether,
+                useIceway,
+                usePistonbolt,
+                useRailway,
+                useBoatway,
+                useRoadway
+            ) => {
+                const methods = getSpeeds()
+                const setGraphs = (node, name, set, graph, nodeKey, routes) => {
+                    try {
+                        if (node[name] > set || node[name] === undefined) {
+                            node[name] = set // Node Graph, for Pathing
+                            if (name !== nodeKey) {
+                                graph[nodeKey][name] = routes // Render Graph, for Rendering
+                            }
+                        }
+                    } catch (error) {
+                        console.error(node, name, set, graph, nodeKey, routes, error)
+                    }
+                }
+                const weightCorrection = (locationRoute) => {
+                    let weight = 0
+                    try {
+                        weight = locationRoute[1]/methods[methodKey]
+                        if (weight === Infinity | weight === NaN) {
+                            weight = 0
+                        }
+                    } finally {
+                        return weight
+                    }
+                }
+                const isMethodEnabled = (methodKey) => {
+                    switch (methodKey) {
+                        case "roadways":
+                            if (useRoadway) return true
+                            else return false
+                        case "iceways":
+                            if (useIceway) return true
+                            else return false
+                        case "pistonbolts":
+                            if (usePistonbolt) return true
+                            else return false
+                        case "railways":
+                            if (useRailway) return true
+                            else return false
+                        case "boatways":
+                            if (useBoatway) return true
+                            else return false
+                        default:
+                            throw new RangeError(`This method (${methodKey}) is unvalid!`)
+                    }
+                }
+                const isMethodToll = (locationRoute) => {
+                    if (locationRoute[2] !== undefined) {
+                        let toll = locationRoute[2]
+                        return [
+                            true,
+                            toll.currency,
+                            toll.price,
+                            toll.pass,
+                            toll.passPrice
+                        ]
+                    } else {
+                        return [
+                            false,
+                            "barrier",
+                            0,
+                            "nullcard",
+                            0
+                        ]
+                    }
+                }
+                
+                let outputNodeGraph = {}
+                let outputRenderGraph = {}
+
+                const compileGraph = (routes, routeKey) => {
+                    for (let nodeKey in routes) {
+                        const node = routes[nodeKey]
+                        console.debug("Begin New Compilation", nodeKey, node)
+                        let nodeRoutes = {}
+                        outputRenderGraph[nodeKey] = {}
+
+                        for (methodKey in node[1]) {
+                            if (isMethodEnabled(methodKey)) {
+                                const method = node[1][methodKey]
+                                console.debug(method, node[1][methodKey])
+                                for (let routeKey in method) {
+                                    const locationRoute = method[routeKey]
+
+                                    // "Infinity" weight is technically possible, avoid that.
+                                    const weight = weightCorrection(locationRoute)
+
+                                    // Handle tolls, currently disabled
+                                    /*
+                                    let tolls = isMethodToll(locationRoute)
+                                    console.log("Before Toll Checks", tolls)
+                                    if (tolls[0]) {
+                                        if (tollMode === "avoid-tolls") {
+                                            continue
+                                        } else
+                                        if (tollMode === "unless-necessary") {
+                                            if ($(`#have-${tolls[3]}`)) {   // Checks if the card is whitelisted
+                                                locationRoute[0] *= 4       // If not, nuke the weight
+                                            }
+                                        }
+                                    }
+                                    console.log("After Toll Checks", tolls)
+                                    */
+
+                                    // Handle adding to the graphs
+                                    setGraphs(nodeRoutes, routeKey, weight, outputRenderGraph, nodeKey, locationRoute[0])
+                                    console.debug(`"${nodeKey}"'s ${methodKey} route to "${routeKey}" is ${locationRoute[1]} meters. Weight of ${weight}.`)
+                                }
+                            }
+                        }
+
+                        if (useWarps) {
+                            setGraphs(nodeRoutes, "Outpost", 0, outputRenderGraph, nodeKey, ["Outpost Warp"])
+                            setGraphs(nodeRoutes, "New Spawn", 0, outputRenderGraph, nodeKey, ["New Spawn Warp"])
+                            setGraphs(nodeRoutes, "Old Spawn", 0, outputRenderGraph, nodeKey, ["Old Spawn Warp"])
+                        }
+
+                        // Finishing up this iteration
+                        outputNodeGraph[nodeKey] = [node[0],nodeRoutes]
+                        console.debug(`"${nodeKey}" compiled successfully`)
+                    }
                 }
 
-                // Finishing up
-                outputNodeGraph[node] = [
-                    node[0],
-                    nodeRoutes
-                ]
-                console.debug(`"${node}" compiled successfully`)
+                console.debug("method values: ", methods)
+                console.debug(useWarps,useNether,useIceway,usePistonbolt,useRailway,useBoatway,useRoadway)
+
+                compileGraph(routes)
+
+                return {
+                    processedGraph: outputNodeGraph,
+                    renderGraph: outputRenderGraph
+                }
             }
-            return outputNodeGraph
-        }
 
-        const renderRoute = (route) => {
-            statusInjection.textContent = "There was an issue making the route. This could be because the settings are too strict, you didn't choose the start and/or end points, or you chose locations in two different regions."
-            //`Found route in ${routingFnTime}ms`
-        }
+            const internalRoute = () => {
 
-        const renderNerdy = (compileTime, routingTime, renderTime, graphLength) => {
-            $("#compile-time").get()[0].textContent = `compile-time: ${compileTime}ms`
-            $("#route-time").get()[0].textContent = `route-time: ${routingTime}ms`
-            $("#render-time").get()[0].textContent = `route-render-time: ${renderTime}ms`
-            $("#graph-length").get()[0].textContent = `node-graph-length: ${graphLength}`
-            document.getElementById("nerds").style.display = "block"
-        }
+                function aStar(graph, startNode, goalNode) {
 
-        const route = () => {
+                    function reconstructPath(cameFrom, current) {
+                        let totalPath = [current]
+                        while (current in cameFrom) {
+                            current = cameFrom[current]
+                            totalPath.unshift(current)
+                        }
+                        return totalPath
+                    }
+
+                    function heuristic(node, goal) {
+                        return Math.hypot(goal[0][0] - node[0][0], goal[0][1] - node[0][1])
+                    }
+
+                    class Queue {
+                        constructor() {
+                            this.nodes = []
+                        }
+
+                        enqueue(priority, key) {
+                            this.nodes.push({ key, priority })
+                            this.sort()
+                        }
+
+                        dequeue() {
+                            return this.nodes.shift()
+                        }
+
+                        sort() {
+                            this.nodes.sort((a, b) => a.priority - b.priority)
+                        }
+
+                        isEmpty() {
+                            return !this.nodes.length
+                        }
+                    }
+
+                    console.log(graph, startNode, goalNode)
+                    if (jQuery.isEmptyObject(graph) || startNode === 'undefined' || goalNode === 'undefined') {
+                        return { path: [], pathTook: null, reachable: false, reason: "The routing data was bad. This most likely means you didn\'t choose a start/end destination." }
+                    }
+
+                    let openSet = new Queue()
+                    openSet.enqueue(0, startNode)
+
+                    let cameFrom = {}
+                    let gScore = {}
+                    let fScore = {}
+
+                    for (let node in graph) {
+                        gScore[node] = Infinity
+                        fScore[node] = Infinity
+                    }
+
+                    gScore[startNode] = 0
+                    fScore[startNode] = heuristic(startNode, goalNode)
+
+                    console.debug("gScore", gScore)
+                    console.debug("fScore", fScore)
+                    console.debug("cameFrom", cameFrom)
+                    console.debug("openSet.nodes", openSet.nodes)
+                    console.debug("nodeGraph", graph)
+
+                    while (!openSet.isEmpty()) {
+                        let current = openSet.dequeue().key
+
+                        if (current === goalNode) {
+                            return { path: reconstructPath(cameFrom, current), pathTook: cameFrom, reachable: true, reason: null }
+                        }
+
+                        console.debug(current, graph[current])
+                        for (let neighbor in graph[current][1]) {
+                            let tentative_gScore = gScore[current] + graph[current][1][neighbor]
+                            console.debug(neighbor, tentative_gScore < gScore[neighbor])
+
+                            if (tentative_gScore < gScore[neighbor]) {
+                                cameFrom[neighbor] = current
+                                gScore[neighbor] = tentative_gScore
+                                fScore[neighbor] = gScore[neighbor] + heuristic(neighbor, goalNode)
+                                openSet.enqueue(fScore[neighbor], neighbor)
+                            }
+                        }
+                    }
+
+                    console.error('This route is impossible to complete. This most likely means you chose options in differing regions (Outpost and New Spawn are disconnected from Old Spawn), or your allowed methods are too restrictive.')
+                    return { path: [], pathTook: null, reachable: false, reason: "This route is impossible to complete. This most likely means you chose options in differing regions (Outpost and New Spawn are disconnected from Old Spawn), your allowed methods are too restrictive, or the locations are not on the network yet." }
+                }
+
+                let beginGraphPreprocess = performance.now()
+                let { processedGraph, renderGraph } = compileRoutingGraph(
+                    $("#tolls").val(),
+                    $("#use-warps").is(":checked"),
+                    $("#use-nether").is(":checked"),
+                    $("#use-iceways").is(":checked"),
+                    $("#use-pistonbolt").is(":checked"),
+                    $("#use-minecarts").is(":checked"),
+                    $("#use-boatways").is(":checked"),
+                    $("#use-roadways").is(":checked"),
+                    $('#method').val()
+                )
+                let graphProcessTime = performance.now() - beginGraphPreprocess
+
+
+                let beginAStarFn = performance.now()
+                let { 
+                    path, 
+                    pathTook, 
+                    reachable, 
+                    reason 
+                } = aStar(
+                    processedGraph,
+                    $("#from").val(),
+                    $("#to").val()
+                )
+                let AStarFnTime = performance.now() - beginAStarFn
+
+                return {
+                    route: path,
+                    graph: [processedGraph, renderGraph],
+                    path: pathTook,
+                    error: [reachable, reason],
+                    routingTime: AStarFnTime,
+                    graphingTime: graphProcessTime
+                }
+            }
+            
+            const renderRoute = (route, graph, error, graphingTime, routingTime) => {
+
+                const statusRender = (error, milliseconds) => {
+                    console.debug(error)
+                    if (error !== undefined && !error[0]) {
+                        statusInjection.text(`There was an issue making the route: ${error[1]}`)
+                    } else {
+                        statusInjection.text(`Route created in ${milliseconds}ms`)
+                    }
+                }
+
+                const textRender = (route, graph, parsed) => {
+                    const flavorText = {
+                        // Up to 10 texts in each category
+                        keepGoing: [
+                            // formatted like: "[TEXT] for (another) [DISTANCE]km (more)"
+                            "Keep going",
+                            "Stay on this route",
+                            "Continue on",
+                            "Keep holding W",
+                            "Make sure you have enough food and keep going",
+                            "Just keep swimming",
+                        ],
+                        interchange: [
+                            // formatted like: "[TEXT] (the) [DESTINATION]"
+                            "Make your way to",
+                            "Find your way to",
+                            "You should see signs for",
+                            "Follow the signs for",
+                        ],
+                        waiting: [
+                            // formatted like: "[TEXT] [DESTINATION], then [INSTRUCTIONS]"
+                            "Wait until",
+                            "Stare into the sun until",
+                        ],
+                        commandTeleport: [
+                            // formatted like: "[TEXT] [DESTINATION]"
+                            "Warp via",
+                            "Warp to",
+                            "Teleport to",
+                            "Wonder why the two major regions are almost 3,000km apart and teleport to",
+                            "Wonder why the two major regions are just under 3,000km apart and warp to"
+                        ],
+                        netherTeleport: [
+                            // formatted like: "[TEXT] [DESTINATION]'s Nether Portal"
+                            "Walk through",
+                            "Run through",
+                            "Jump through",
+                            "Slide through",
+                            "Ahead through",
+                        ],
+                        atDestination: [
+                            "You will have reached your destination.",
+                        ]
+                    }
+                    const getFlavorText = (textList, append) => {
+                        let notChosen = true
+                        let choice
+                        while (notChosen) {
+                            choice = Math.round(Math.random() * 10)
+                            if (textList[choice] !== undefined) {
+                                notChosen = false
+                            }
+                        }
+                        return `${textList[choice]} ${append}`
+                    }
+                    const inject = $("#output-injection")
+
+                    inject.text("The text renderer is still a work in progress, but if you open up the developer menu the raw routing data is available and usable if you know how to read it.")
+                    inject.css("display","block")
+                }
+
+                const parseGraph = (route, graph) => {
+
+                    console.log(route, graph[0], graph[1])
+
+                    let parsedRoute;
+                    let info;
+                    let kmit;
+
+                    return {
+                        parsedRoute,
+                        info,
+                        kmit
+                    }
+                }
+
+                const statusInjection = $("#status-injection")
+                const routeInjection = $("#output-injection")
+                const parsed = parseGraph(route, graph)
+
+                statusRender(error, (graphingTime+routingTime))
+                textRender(parsed)
+            }
+
+            const renderNerdy = (compileTime, routingTime, renderTime, graph) => {
+                $("#compile-time").text(`compile-time: ${compileTime}ms`)
+                $("#route-time").text(`route-time: ${routingTime}ms`)
+                $("#render-time").text(`route-render-time: ${renderTime}ms`)
+                $("#graph-length").text(`node-graph-length: ${Object.keys(graph[0]).length} nodes`)
+                $("#nerds").css("display","block")
+            }
+
             let beginRoutingFn = performance.now()
 
-            const heuristicFn = (document.getElementById("method").value === "scenic") ?
-                // This causes the pathing algorithm to freak out and take a really long route. It can also cause it to fail completely.
-                (startNode, goalNode) => { return heuristic(startNode, goalNode) * Math.floor(Math.random() * 100); } :
-                // This is the normal heuristic function. Does nothing special
-                (startNode, goalNode) => { return heuristic(startNode, goalNode) }
+            let { route, graph, path, error, routingTime, graphingTime } = internalRoute()
+            console.debug(route, graph, path, error, routingTime, graphingTime)
 
-            let beginGraphPreprocess = performance.now()
-            let processedGraph = processRoutingGraph(
-                $("#use-warps").is(":checked"),
-                $("#use-nether").is(":checked"),
-                $("#use-iceway").is(":checked"),
-                $("#use-pistonbolt").is(":checked"),
-                $("#use-minecarts").is(":checked"),
-                $("#use-boatways").is(":checked"),
-                $("#use-roadways").is(":checked"),
-                $("#method").val()
-            )
-            let graphProcessTime = performance.now() - beginGraphPreprocess
-
-
-            let beginAStarFn = performance.now()
-            let route = aStar(
-                processedGraph,
-                $("#from").val(),
-                $("#to").val(),
-                heuristicFn
-            )
-            let AStarFnTime = performance.now() - beginAStarFn
-
-            console.debug(route)
             let beginRenderFn = performance.now()
-            renderRoute(route)
+            renderRoute(route, graph, error, graphingTime, routingTime)
             let renderFnTime = performance.now() - beginRenderFn
-            renderNerdy(graphProcessTime, AStarFnTime, renderFnTime, processedGraph.length)
+            renderNerdy(graphingTime, routingTime, renderFnTime, graph)
 
             // Finishing up
             let routingFnTime = performance.now() - beginRoutingFn
             console.debug(`Took ${routingFnTime}ms total`)
         }
-
-        const checkRouter = (value) => {
-            let ele = document.getElementById("scenic-loops")
-
-            if (value !== "scenic") {
-                ele.setAttribute("disabled", true)
-            } else {
-                ele.removeAttribute("disabled")
-            }
-        }
-
-        const toggleRelatedElement = (eleId) => {
-            let ele = document.getElementById(eleId)
-
-            if (ele.getAttribute("disabled") == null) {
-                ele.setAttribute("disabled", true)
-            } else {
-                ele.removeAttribute("disabled")
-            }
-        }
-
-        const flipSelections = () => {
-            let from = $("#from").val()
-            let to = $("#to").val()
-            $("#from").val(to)
-            $("#to").val(from)
-        }
-
-        /*
-        Below is a complete implementation of the A* (or A-Star) pathing algorithm, slightly modified for use with this router.
-        I highly recommend looking into A* and Dijkstra pathing, its fun and you can do alot with it.
-        */
-        class Queue {
-            constructor() {
-                this.nodes = [];
-            }
-
-            enqueue(priority, key) {
-                this.nodes.push({ key, priority });
-                this.sort();
-            }
-
-            dequeue() {
-                return this.nodes.shift();
-            }
-
-            sort() {
-                this.nodes.sort((a, b) => a.priority - b.priority);
-            }
-
-            isEmpty() {
-                return !this.nodes.length;
-            }
-        }
-
-        // Takes in 2 coordinates and outputs the distance between them
-        function heuristic(node, goal) {
-            return Math.hypot(goal[0][0] - node[0][0], goal[0][1] - node[0][1]);
-        }
-
-        //Takes in a node graph, two nodes, and a special function and tries to find the shortest route
-        function aStar(graph, startNode, goalNode, heuristicFn) {
-
-            if (jQuery.isEmptyObject(graph)) {
-                console.error('Goal node is unreachable from the start node. This most likely means you didn\'t choose a start/end destination, or your allowed methods are too restrictive.');
-                return { path: [], reachable: false };
-            }
-
-            let openSet = new Queue();
-            openSet.enqueue(0, startNode);
-
-            let cameFrom = {};
-            let gScore = {};
-            let fScore = {};
-
-            for (let node in graph) {
-                gScore[node] = Infinity;
-                fScore[node] = Infinity;
-            }
-
-            gScore[startNode] = 0;
-            fScore[startNode] = heuristicFn(startNode, goalNode);
-
-            console.debug("gScore", gScore)
-            console.debug("fScore", fScore)
-            console.debug("cameFrom", cameFrom)
-            console.debug("openSet.nodes", openSet.nodes)
-            console.debug("nodeGraph", graph)
-
-            while (!openSet.isEmpty()) {
-                let current = openSet.dequeue().key;
-
-                if (current === goalNode) {
-                    return { path: reconstructPath(cameFrom, current), reachable: true };
-                }
-
-                for (let neighbor in graph[current][1]) {
-                    let tentative_gScore = gScore[current] + graph[current][1][neighbor];
-                    console.debug(neighbor, tentative_gScore < gScore[neighbor])
-
-                    if (tentative_gScore < gScore[neighbor]) {
-                        cameFrom[neighbor] = current;
-                        gScore[neighbor] = tentative_gScore;
-                        fScore[neighbor] = gScore[neighbor] + heuristicFn(neighbor, goalNode);
-                        openSet.enqueue(fScore[neighbor], neighbor);
-                    }
-                }
-            }
-
-            console.error('Goal node is unreachable from the start node. This most likely means you chose options in differing regions, or your allowed methods are too restrictive.');
-            return { path: [], reachable: false };
-        }
-
-        // Finishes the routing process
-        function reconstructPath(cameFrom, current) {
-            let totalPath = [current];
-            while (current in cameFrom) {
-                current = cameFrom[current];
-                totalPath.unshift(current);
-            }
-            return totalPath;
-        }
+    
     </script>
 </body>
 

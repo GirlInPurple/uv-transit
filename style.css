@@ -5,7 +5,6 @@ html {
     box-sizing: border-box;
     font-family: "Rubik", sans-serif;
     font-size: 1.25em;
-    height: 110%;
 }
 
 *:before,
@@ -17,7 +16,14 @@ body>* {
 body>* {
     padding-left: 5%;
     padding-right: 5%;
+    padding-bottom: 10%;
     white-space: nowrap;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 hr {
@@ -26,6 +32,8 @@ hr {
 
 .logo {
     background-color: #1c1c1c;
+    padding-bottom: 0%;
+    width: 100%;
 }
 
 .logo img {
@@ -40,10 +48,21 @@ textarea {
     font-size: 1.0em;
 }
 
-.option {
-    background-color: #efefef;
-    padding: 10px;
-    margin: 15px 0;
+.content {
+    min-height: 1100px;
+    padding: 0% 5%;
+}
+
+.options,
+.output,
+.town-desc {
+    min-height: 50px;
+    padding: 0% 1%;
+    width: 370px;
+}
+
+.options {
+    padding: 0%;
 }
 
 ul.no-bullet li {
@@ -54,10 +73,27 @@ div.sponsors img {
     max-height: 100px;
 }
 
-.options,
-.output {
-    min-height: 50px;
-    width: 50%;
+.options .margin * {
+    margin-left: 4.5px;
+}
+
+.options .margin .container {
+    margin-left: 0;
+}
+
+.footer {
+    font-size: x-small;
+    color: white;
+    text-align: center;
+}
+
+.footer p {
+    width: 75%;
+    max-width: 450px;
+}
+
+p.small {
+    font-size: smaller;
 }
 
 button,
@@ -94,6 +130,7 @@ h2,
 h3,
 p {
     white-space: normal;
+    margin: 0%;
 }
 
 h2,
@@ -103,26 +140,49 @@ h3 {
     font-weight: bold;
 }
 
-option.outpost {
+.status-injection {
+    font-size: 0.7em;
+}
+
+.nowrap {
+    white-space: nowrap;
+}
+
+span {
+    font-size: smaller;
+}
+
+.outpost {
     background-color: rgb(128, 128, 255);
 }
 
-option.outpost:hover {
-    background-color: rgb(200, 200, 255);
-}
-
-option.old-spawn {
+.old-spawn {
     background-color: rgb(255, 128, 128);
 }
 
-option.old-spawn:hover {
-    background-color: rgb(255, 200, 200);
-}
-
-option.new-spawn {
+.new-spawn {
     background-color: rgb(255, 255, 128);
 }
 
-option.new-spawn:hover {
-    background-color: rgb(255, 255, 200);
+::-webkit-scrollbar {
+    width: 8px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    background-color: #d5d5d5;
+}
+
+::-webkit-scrollbar-thumb:hover::-webkit-scrollbar {
+    opacity: 1;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #1c1c1c;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: #5c5c5c;
+}
+
+::-webkit-scrollbar-thumb:active {
+    background-color: #3c3c3c;
 }
