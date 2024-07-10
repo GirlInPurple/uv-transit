@@ -24,6 +24,7 @@ body>* {
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-direction: column;
 }
 
 hr {
@@ -57,12 +58,8 @@ textarea {
 .output,
 .town-desc {
     min-height: 50px;
-    padding: 0% 1%;
-    width: 370px;
-}
-
-.options {
     padding: 0%;
+    width: 370px;
 }
 
 ul.no-bullet li {
@@ -112,7 +109,7 @@ select {
 }
 
 select.in-table {
-    width: 150px;
+    width: 200px;
 }
 
 input[type="checkbox"],
@@ -140,7 +137,7 @@ h3 {
     font-weight: bold;
 }
 
-.status-injection {
+.injection {
     font-size: 0.7em;
 }
 
@@ -150,6 +147,31 @@ h3 {
 
 span {
     font-size: smaller;
+}
+
+.route-box {
+    border-left: 5px solid #ffffff;
+    padding-left: 5px;
+    padding-bottom: 5px;
+    padding-top: 5px;
+}
+
+.route-box>* {
+    font-size: smaller;
+    white-space: normal;
+}
+
+.route-box>span.line {
+    font-size: medium;
+    padding: 2px;
+}
+
+.route-box span.station {
+    font-size: large;
+    padding: 2px;
+
+    background-color: rgb(0, 64, 109);
+    color: white;
 }
 
 .outpost {
