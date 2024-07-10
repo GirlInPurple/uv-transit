@@ -31,13 +31,16 @@ let places = {
     "Gold Spur": "old-spawn",
     "Hana Reservoir": "old-spawn",
     "HoboNation": "old-spawn",
+    "Hounderia":"outpost",
     "Illyria": "outpost",
+    "La Cueva": "outpost",
     "Krill Lanka": "outpost",
     "Malbork": "new-spawn",
     "Malus": "outpost",
+    "Naval Detroit": "old-spawn",
     "Mercy": "old-spawn",
     "Merk Town": "new-spawn",
-    "Naval Detroit": "old-spawn",
+    "Moderne": "new-spawn",
     "New Spawn": "new-spawn",
     "Old Mann": "old-spawn",
     "Old Spawn": "old-spawn",
@@ -45,7 +48,6 @@ let places = {
     "Pagasa City": "outpost",
     "Primitown": "old-spawn",
     "Rotherhythe": "outpost",
-    "STEAMEDHAMS": "new-spawn",
     "Scintilla": "old-spawn",
     "Seacrestica": "outpost",
     "Siberia": "old-spawn",
@@ -55,12 +57,14 @@ let places = {
     "Southern Hollow": "old-spawn",
     "Spanish Settlements": "new-spawn",
     "Steambolt": "outpost",
+    "STEAMEDHAMS": "new-spawn",
     "Stonehelm": "outpost",
     "Tegridy": "outpost",
     "Terni": "old-spawn",
     "Terra": "outpost",
     "The Swamp": "old-spawn",
     "Totemia": "new-spawn",
+    "USUV HQ": "new-spawn",
     "Valhalla": "old-spawn",
     "Vault 11": "new-spawn",
     "Vault 17": "old-spawn",
@@ -92,18 +96,41 @@ const methodMetadata = {
         operator:"UVDOT Outpost Division"
     },
     // New Spawn Roadways
+    "UV-NS-1":{
+        color:["#9fa4d8","black"],
+        operator:"UVDOT New Spawn Division"
+    },
+    "UV-NS-2":{
+        color:["#9aa2d0","black"],
+        operator:"UVDOT New Spawn Division"
+    },
+    "UV-NS-202":{
+        color:["#b6bff6","black"],
+        operator:"UVDOT New Spawn Division"
+    },
+    "UV-NS-204":{
+        color:["#bcc1ff","black"],
+        operator:"UVDOT New Spawn Division"
+    },
     // Old Spawn Roadways
+    "UV-OS-1":{
+        color:["#a0a0a0","black"],
+        operator:"UVDOT Old Spawn Division"
+    },
     // Misc. Roadways
     "UV-VY":{
         altName: "The Voyaway",
         color:["#ffff00","black"],
-        operator:"UVDOT Outpost Division"
+        operator:"UVDOT"
     },
     "Road to Ekilorea Island":{
         color:["#b76b39","white"],
         operator:"Town of Ekilorea"
     },
-
+    "Unlabeled Roadway":{
+        color:["black","white"],
+        operator:"Unknown"
+    },
     // Trains
     "UltraStar 1":{
         color:["#ab92bf","white"],
@@ -129,40 +156,79 @@ const methodMetadata = {
         color:["#089180","white"],
         operator:"Seacrestica Transports Outpost"
     },
-
-    // Iceways
+    // Outpost Iceways
     "OPE Ouest":{
-        color:["#000000","white"],
+        color:["#cc0000","white"],
         operator:"OPC"
     },
     "OPE Est":{
-        color:["#000000","white"],
+        color:["#00ccb8","black"],
         operator:"OPC"
     },
     "OPE Sud":{
-        color:["#000000","white"],
+        color:["#334eff","white"],
         operator:"OPC"
     },
     "OPE Nord":{
-        color:["#000000","white"],
+        color:["#119c07","white"],
         operator:"OPC"
     },
-
+    // New Spawn Iceways
+    "Spawn Red Line":{
+        color:["#ff0000","white"],
+        operator:"Unknown"
+    },
+    "Spawn Yellow Line":{
+        color:["#f7eb00","white"],
+        operator:"Unknown"
+    },
+    "Spawn Aqua Line":{
+        color:["#00feed","black"],
+        operator:"Unknown"
+    },
+    "Spawn Purple Line":{
+        color:["#8800f7","white"],
+        operator:"Unknown"
+    },
+    "Spawn Green Line":{
+        color:["#059100","white"],
+        operator:"Unknown"
+    },
+    "Spawn Orange Line":{
+        color:["#ff9100","white"],
+        operator:"Unknown"
+    },
+    "Spawn Pink Line":{
+        color:["#f262ff","white"],
+        operator:"Unknown"
+    },
+    "Spawn Blue Line":{
+        color:["#0040fe","white"],
+        operator:"Unknown"
+    },
+    "Spawn Gold Line":{
+        color:["#dea000","white"],
+        operator:"Unknown"
+    },
+    "Spawn Silver Line":{
+        color:["#c1e8ff","black"],
+        operator:"USUV, Unknown"
+    },
     // Warps
     "Outpost Warp":{
-        color:["#000000","white"],
+        color:["#6ed8b8","white"],
         operator:"Server Staff"
     },
     "New Spawn Warp":{
-        color:["#000000","white"],
+        color:["#feff72","black"],
         operator:"Server Staff"
     },
     "Old Spawn Warp":{
-        color:["#000000","white"],
+        color:["#8b4f4f","white"],
         operator:"Server Staff"
     },
     "Olympics Warp":{
-        color:["#000000","white"],
+        color:["#864663","white"],
         operator:"Server Staff"
     },
 }
@@ -171,20 +237,48 @@ const methodMetadata = {
  * All possible routes between locations, in a semi-human readable format.
 */
 const routes = {
+    // Selectable nodes visible in the UI
     "Banal-Witchita": [
         [-1890005,-1898735],
         {
             roadways: {
-                "UV-OP-1 Ekilorea Intersection": [["UV-OP-1", "UV-VY"], 2000],
-                "UV-OP-1 UV-VY Intersection": [["UV-OP-1", "UV-VY"], 3000],
+                "UV-OP-1 Ekilorea Intersection": [["UV-OP-1", "UV-VY"], 1800],
+                "UV-OP-1 UV-VY Intersection": [["UV-OP-1", "UV-VY"], 2700],
+            },
+            iceways: {
+                "Rotherhythe": [["OPE Nord"], 8500],
+                "Hounderia": [["OPE Nord"], 1000],
+            }
+        },
+    ],
+    "Borealis": [
+        [-2002925,-1995367],
+        {
+            roadways: {
+                "Southern Polaris": [["UV-NS-2","UV-VY"], 500],
+                "Sky Temple": [["UV-NS-2","UV-VY"], 500],
+                "Hephasdor Factory": [["UV-NS-202"], 1300],
+                "Northern Borealis": [["Unlabeled Roadway"], 300]
+            },
+            iceways: {
+                "Publix": [["Spawn Purple Line"], 100],
+                "Northwest Island": [["Spawn Purple Line"], 450],
             },
         },
     ],
-    "Ekilorea": [
-        [-1888319,-1899481],
+    "Northern Borealis": [
+        [],
         {
             roadways: {
-                "UV-OP-1 Ekilorea Intersection": [["Road to Ekilorea Island"], 1200],
+                "Borealis": [["Unlabeled Roadway"], 300]
+            },
+        }
+    ],
+    "Ekilorea": [
+        [-1888320,-1899676],
+        {
+            roadways: {
+                "UV-OP-1 Ekilorea Intersection": [["Road to Ekilorea Island"], 200],
             },
         },
     ],
@@ -193,8 +287,7 @@ const routes = {
         {
             roadways: {
                 "UV-OP-201 UV-OP-2 Intersection": [["UV-OP-201"], 1500],
-
-                "UV-OP-1 UV-VY Intersection": [["UV-OP-1"], 3000],
+                "UV-OP-1 UV-VY Intersection": [["UV-OP-1"], 1000],
             },
             railways: {
                 "Outpost": [["UltraStar 1"], 1600, {
@@ -205,18 +298,38 @@ const routes = {
                 }]
             },
             iceways: {
-                "Stonehelm": [["OPE Nord"], 1200]
+                "Stonehelm": [["OPE Nord"], 2400],
+                "Hounderia": [["OPE Nord"], 1700],
             },
         },
     ],
+    "Hounderia": [
+        [-1889736,-1898044],
+        {
+            iceways: {
+                "Evergreen": [["OPE Nord"], 1700],
+                "Banal-Witchita": [["OPE Nord"], 1000],
+            }
+        }
+    ],
     "Illyria": [
-        [-1894692,-1894826],
+        [-1894664,-1894940],
         {
             roadways: {
-                "UV-OP-203 UV-OP-2 Intersection": [["UV-OP-2"], 1200],
+                "La Cueva": [["UV-OP-2"], 200],
+            },
+        },
+    ],
+    "La Cueva": [
+        [-1894664,-1894940],
+        {
+            roadways: {
+                "UV-OP-203 UV-OP-2 Intersection": [["UV-OP-2"], 1500],
+
+                "Illyria": [["UV-OP-2"], 200],
             },
             railways: {
-                "Pagasa City": [["UltraStar 2"], 1200, {
+                "Pagasa City": [["UltraStar 2"], 2000, {
                     currency: "Emerald",
                     price: 4,
                     pass: "SeaCard",
@@ -224,7 +337,50 @@ const routes = {
                 }]
             },
             iceways: {
-                "Outpost": [["OPE Ouest"], 1200]
+                "Outpost": [["OPE Ouest"], 3800]
+            },
+        },
+    ],
+    "Malus":[
+        [-1891248,-1890524],
+        {
+            railways: {
+                "Outpost": [["UltraStar 4"], 5000, {
+                    currency: "Emerald",
+                    price: 4,
+                    pass: "SeaCard",
+                    passPrice: 2
+                }]
+            }
+        }
+    ],
+    "Mercy": [
+        [-526,155],
+        {
+            roadways: {
+                "Old Spawn": [["UV-OS-1"], 1200],
+            },
+        },
+    ],
+    "New Spawn": [
+        [-2002407,-1995444],
+        {
+            roadways: {
+                "Eastern Polaris": [["UV-NS-204"], 200],
+                "Southern Polaris": [["UV-NS-1","UV-NS-2","UV-VY"], 500],
+                "Southern Spawn Border": [["UV-NS-1","UV-NS-2","UV-VY"], 320]
+            },
+            iceways: {
+                "Borealis": [["Spawn Purple Line"], 500],
+                "Birchgrove": [["Spawn Orange Line"], 500],
+            },
+        },
+    ],
+    "Old Spawn": [
+        [-1335,-22],
+        {
+            roadways: {
+                "Mercy": [["UV-OS-1"], 1200],
             },
         },
     ],
@@ -234,43 +390,49 @@ const routes = {
             roadways: {
                 "UV-OP-201 UV-OP-2 Intersection": [["UV-OP-2"], 1200],
 
-                "Evergreen": [["UV-OP-1"], 1200],
-                "Stonehelm": [["UV-OP-1", "UV-OP-2"], 1200],
+                "Evergreen": [["UV-OP-1"], 1300],
+                "Stonehelm": [["UV-OP-1", "UV-OP-2"], 800],
             },
             railways: {
-                "Seacrestica": [["UltraStar 1"], 1200, {
+                "Seacrestica": [["UltraStar 1"], 2000, {
                     currency: "Emerald",
                     price: 4,
                     pass: "SeaCard",
                     passPrice: 2
                 }],
-                "Evergreen": [["UltraStar 2"], 1200, {
+                "Evergreen": [["UltraStar 2"], 1600, {
                     currency: "Emerald",
                     price: 4,
                     pass: "SeaCard",
                     passPrice: 2
                 }],
+                "Malus": [["UltraStar 3"], 5000, {
+                    currency: "Emerald",
+                    price: 4,
+                    pass: "SeaCard",
+                    passPrice: 2
+                }]
             },
             iceways: {
-                "Illyria": [["OPE Ouest"], 1200],
-                "Stonehelm": [["OPE Nord"], 1200],
+                "La Cueva": [["OPE Ouest"], 3800],
+                "Stonehelm": [["OPE Nord"], 880],
             },
         },
     ],
     "Pagasa City": [
-        [-1893328,-1894502],
+        [-1893320,-1894596],
         {
             roadways: {
-                "UV-OP-203 UV-OP-2 Intersection": [["UV-OP-203"], 1200],
+                "UV-OP-203 UV-OP-2 Intersection": [["UV-OP-203"], 350],
             },
             railways: {
-                "Seacrestica": [["UltraStar 2"], 1200, {
+                "Seacrestica": [["UltraStar 2"], 2100, {
                     currency: "Emerald",
                     price: 4,
                     pass: "SeaCard",
                     passPrice: 2
                 }],
-                "Illyria": [["UltraStar 1"], 1200, {
+                "La Cueva": [["UltraStar 1"], 2000, {
                     currency: "Emerald",
                     price: 4,
                     pass: "SeaCard",
@@ -278,18 +440,32 @@ const routes = {
                 }],
             },
         },
+    ],
+    "Rotherhythe": [
+        [-1887536,-1905476],
+        {
+            roadways: {
+                "UV-OP-1 Ekilorea Intersection": [["UV-OP-1", "UV-VY"], 6000],
+
+                "Steambolt": [["UV-OP-1", "UV-VY"], 7000],
+            },
+            iceways: {
+                "Banal-Witchita": [["OPE Nord"], 8500],
+                "Steambolt": [["OPE Nord"], 8500]
+            },
+        }
     ],
     "Seacrestica": [
         [-1891664,-1893972],
         {
             railways: {
-                "Outpost": [["UltraStar 2"], 1200, {
+                "Outpost": [["UltraStar 2"], 2000, {
                     currency: "Emerald",
                     price: 4,
                     pass: "SeaCard",
                     passPrice: 2
                 }],
-                "Pagasa City": [["UltraStar 1"], 1200, {
+                "Pagasa City": [["UltraStar 1"], 2100, {
                     currency: "Emerald",
                     price: 4,
                     pass: "SeaCard",
@@ -298,24 +474,86 @@ const routes = {
             },
         },
     ],
-    "Stonehelm": [
-        [-1893230,-1895039],
+    "Sky Temple": [
+        [-2002407,-1995444],
         {
             roadways: {
-                "Outpost": [["UV-OP-1", "UV-OP-2"], 1200],
+                "Northern Borealis": [["UV-NS-204"], 550],
+                "Borealis": [["UV-NS-2","UV-VY"], 560],
             },
             iceways: {
-                "Outpost": [["OPE Nord"], 1200],
-                "Evergreen": [["OPE Nord"], 1200]
+                "Northwest Island": [["Spawn Purple Line"], 200],
+            },
+        },
+    ],
+    "Steambolt": [
+        [-1890008,-1911524],
+        {
+            roadways: {
+                "Rotherhythe": [["UV-OP-1", "UV-VY"], 7000],
+            },
+            iceways: {
+                "Rotherhythe": [["OPE Nord"], 8500]
             },
         }
+    ],
+    "Stonehelm": [
+        [-1890016,-1894716],
+        {
+            roadways: {
+                "Outpost": [["UV-OP-1", "UV-OP-2"], 800],
+            },
+            iceways: {
+                "Outpost": [["OPE Nord"], 880],
+                "Evergreen": [["OPE Nord"], 2400]
+            },
+        }
+    ],
+    // Cannot be selected, but are still valid nodes
+    "Central Polaris": [
+        [-1894664,-1894940],
+        {
+            roadways: {
+                "Northern Polaris": [["UV-NS-1"], 300],
+                "Southern Polaris": [["UV-NS-1"], 150],
+                "Eastern Polaris": [["UV-NS-204"], 150],
+                "Northern Borealis": [["UV-NS-204"], 150],
+            },
+        },
+    ],
+    "Southern Polaris": [
+        [-1894664,-1894940],
+        {
+            roadways: {
+                "New Spawn": [["UV-NS-1","UV-NS-2","UV-VY"], 500],
+                "Central Borealis": [["UV-NS-2","UV-VY"], 500],
+                "Central Polaris": [["UV-NS-1"], 150],
+            },
+        },
+    ],
+    "Hephasdor Factory": [
+        [-1894664,-1894940],
+        {
+            roadways: {
+                
+            },
+        },
+    ],
+    "Northwest Island": [
+        [-1894664,-1894940],
+        {
+            iceways: {
+                "Sky Temple": [["Spawn Purple Line"], 200],
+                "Borealis": [["Spawn Purple Line"], 450],
+            },
+        },
     ],
     "UV-OP-1 UV-VY Intersection": [
         [-1893230,-1895039],
         {
             roadways: {
-                "Evergreen": [["UV-OP-1"], 2000],
-                "Banal-Witchita": [["UV-OP-1", "UV-VY"], 1200],
+                "Evergreen": [["UV-OP-1"], 1000],
+                "Banal-Witchita": [["UV-OP-1", "UV-VY"], 2700],
             }
         }
     ],
@@ -323,8 +561,9 @@ const routes = {
         [-1893230,-1895039],
         {
             roadways: {
-                "Banal-Witchita": [["UV-OP-1", "UV-VY"], 2000],
-                "Ekilorea": [["Road to Ekilorea Island"], 1200],
+                "Banal-Witchita": [["UV-OP-1", "UV-VY"], 1800],
+                "Ekilorea": [["Road to Ekilorea Island"], 200],
+                "Rotherhythe": [["UV-OP-1", "UV-VY"], 6000],
             }
         }
     ],
@@ -332,9 +571,9 @@ const routes = {
         [-1891962,-1895207],
         {
             roadways: {
-                "UV-OP-203 UV-OP-2 Intersection": [["UV-OP-2"], 1200],
+                "UV-OP-203 UV-OP-2 Intersection": [["UV-OP-2"], 1300],
 
-                "Evergreen": [["UV-OP-201"], 1200],
+                "Evergreen": [["UV-OP-201"], 1500],
                 "Outpost": [["UV-OP-2"], 1200],
             },
         },
@@ -343,10 +582,10 @@ const routes = {
         [-1893230,-1895039],
         {
             roadways: {
-                "UV-OP-201 UV-OP-2 Intersection": [["UV-OP-2"], 1200],
+                "UV-OP-201 UV-OP-2 Intersection": [["UV-OP-2"], 1300],
 
-                "Illyria": [["UV-OP-2"], 1200],
-                "Pagasa City": [["UV-OP-203"], 1200],
+                "La Cueva": [["UV-OP-2"], 1500],
+                "Pagasa City": [["UV-OP-203"], 350],
             },
         },
     ],

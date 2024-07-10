@@ -14,8 +14,6 @@
     - Spawn Warp
     - Borealis
     - Sky Temple
-    - Freedom City
-    - Synthvale
   - Old Spawn
     - Old Spawn Warp
     - Mercy

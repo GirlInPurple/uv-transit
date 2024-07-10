@@ -12,11 +12,12 @@ There is a single function that controls all the routing processes, from data ma
 This is activated by the user clicking the "Route!" button.
 
 The function then takes all the settings from the user, along with the location graph, and creates a node graph that is parsable by A-Star. This is the longest part of the base process due to the sheer amount of data it needs to handle.\
-During this stage, weights can be altered in either direction, up or down, depending on the factors the user chooses. This is primarily used to avoid tolls and for the alternative routing methods.
+It does this by calculating the weight of the node's routes, and if its lower it adds or overrides it on the output graph. A specific route can be overwritten many, many times within the same loop, with the weight going lower and lower each time. During this stage, weights can also be altered manually in either direction, up or down, depending on the factors the user chooses. This is primarily used to avoid tolls and for the alternative routing methods.\
+Also during this process, a second graph is made and being written to simultaneously. It contains the data for the renderer to use to determine what the route it, it's method, and how it should be handled with rendering.
 
-The AStar function is the part where the actual routing happens, based on the [A* pathing algorithm](https://en.wikipedia.org/wiki/A*_search_algorithm). It sends back a list of nodes and methods it followed to get this route, or an error message if one occurs.
+The AStar function is the part where the actual routing happens, based on the [A* pathing algorithm](https://en.wikipedia.org/wiki/A*_search_algorithm). It sends back a list of nodes and methods it followed to get this route, or an error message if one occurs. This is the simplest part of the process.
 
-From here, all the data from the pathing and compiling functions get passed into the rendering functions. This is a text based explanation similar to Seacrestica Transport's website's full route description, but will a bunch of extra data attached, like who owns the road/rails/iceway, the distance between nodes, all the other nodes along it, the estimated time, etc. This section is still a work in progress, but is almost finished.
+From here, all the data from the pathing and compiling functions get passed into the rendering functions. This is a text based explanation similar to Seacrestica Transport's website's full route description, but will a bunch of extra data attached, like who owns the roads/rails/iceways, the distance between nodes, all the other nodes along it, the estimated time, etc. This section is based off [Seacrestica Transports's](https://niklas20114552.github.io/st-transports/) router, with heavy modification and only sharing code with the `secondStringify()` function.
 
 ## Adding Location Nodes
 
@@ -39,7 +40,7 @@ const routes = {
                 "Stonehelm": [["EGRK Expressway"], 1200],
             },
             walkways: {
-                "Outpost UltraStar Station": [["Toll"], 0, {
+                "Outpost UltraStar Station": [["Toll"], 245, {
                     currency: "Emerald",
                     price: 4,
                     pass: "SeaCard",
@@ -62,7 +63,6 @@ Lets go from top to bottom:
     - Transit Name(s)
       - Usually the name of the train line or highway in question
     - Distance in Blocks/Meters
-      - For warps, portals, and train/iceway stations, this is usually set to 0. Occasionally the real distance will be set, but due to how short it is theres really no point to doing so in most situations.
     - Toll (if applicable)
       - The toll is again split up into 4 sections:
         - `currency` is the type of currency the toll requires. Common currencies are Diamond, Emerald, and Paper.
@@ -77,8 +77,8 @@ Lets go from top to bottom:
 
 In order of importance:
 
-- Finish the rendering engine
-- Finish the graph, making the router actually useable
-- Finish the Toll Preferences section
-- Port the entire app to use Typescript, and maybe Vue or React
-- Add back the "Scenic" and "Least Transfers" options
+- [x] Finish the rendering engine
+- [ ] Finish the graph, making the router actually useable
+- [ ] Finish the Toll Preferences section
+- [ ] Port the entire app to use Typescript, and maybe Vue or React
+- [ ] Add back the "Scenic" and "Least Transfers" options
