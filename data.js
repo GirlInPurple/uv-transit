@@ -47,7 +47,7 @@ let places = {
     "Rotherhythe": "outpost",
     "STEAMEDHAMS": "new-spawn",
     "Scintilla": "old-spawn",
-    "Seascrestia": "outpost",
+    "Seacrestica": "outpost",
     "Siberia": "old-spawn",
     "Sin City": "outpost",
     "Sky Temple": "new-spawn",
@@ -238,7 +238,7 @@ const routes = {
                 "Stonehelm": [["UV-OP-1", "UV-OP-2"], 1200],
             },
             railways: {
-                "Seascrestia": [["UltraStar 1"], 1200, {
+                "Seacrestica": [["UltraStar 1"], 1200, {
                     currency: "Emerald",
                     price: 4,
                     pass: "SeaCard",
@@ -264,7 +264,7 @@ const routes = {
                 "UV-OP-203 UV-OP-2 Intersection": [["UV-OP-203"], 1200],
             },
             railways: {
-                "Seascrestia": [["UltraStar 2"], 1200, {
+                "Seacrestica": [["UltraStar 2"], 1200, {
                     currency: "Emerald",
                     price: 4,
                     pass: "SeaCard",
