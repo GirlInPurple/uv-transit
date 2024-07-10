@@ -257,7 +257,7 @@ const routes = {
             roadways: {
                 "Southern Polaris": [["UV-NS-2","UV-VY"], 500],
                 "Sky Temple": [["UV-NS-2","UV-VY"], 500],
-                "Hephasdor Factory": [["UV-NS-204"], 1300],
+                "Hephasdor Factory": [["UV-NS-202"], 1300],
                 "Northern Borealis": [["Unlabeled Roadway"], 300]
             },
             iceways: {
