@@ -47,7 +47,7 @@ let places = {
     "Rotherhythe": "outpost",
     "STEAMEDHAMS": "new-spawn",
     "Scintilla": "old-spawn",
-    "Seascrestia": "outpost",
+    "Seacrestica": "outpost",
     "Siberia": "old-spawn",
     "Sin City": "outpost",
     "Sky Temple": "new-spawn",
