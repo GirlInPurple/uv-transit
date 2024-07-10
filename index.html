@@ -40,7 +40,7 @@
                 </p>
             </div>
             <div class="options">
-                <table style="width: 370px;">
+                <table style="width: 350px;">
                     <tbody>
                         <tr>
                             <td><select name="from" id="from" class="in-table">
@@ -127,18 +127,27 @@
         
         jQuery(() => {
             // Dropdowns
-            [$("#from"), $("#to")].forEach((ele) => {
+            ["from","to"].forEach((eleName) => {
+                let ele = $(`#${eleName}`)
+
                 for (townName in places) {
                     ele.append('<option class="' + places[townName] + '" value="' + townName + '">' + townName + '</option>')
                 }
+
+                ele.on("change", () => {
+                    console.debug(`Set ${eleName} to ${ele.val()} in LocalStorage`)
+                    localStorage.setItem(eleName, ele.val())
+                })
+
+                ele.val(localStorage.getItem(eleName))
             })
             // Toggle for if Roadways are on
             $("#use-roadways").on("change", () => {
                 let ele = $("#roads-as")
-                if (ele.attr("disabled") == null) {
-                    ele.attr("disabled", true)
+                if ($("#use-roadways").is(":checked")) {
+                    ele.attr("disabled", false)
                 } else {
-                    ele.attr("disabled")
+                    ele.attr("disabled", true)
                 }
             })
             // Flip the to-from selections
@@ -271,6 +280,8 @@
                         case "boatways":
                             if (useBoatway) return true
                             else return false
+                        case "walkways":
+                            return true
                         default:
                             throw new RangeError(`This method (${methodKey}) is unvalid!`)
                     }
@@ -536,8 +547,6 @@
             */
             const renderRoute = (route, graph, error, graphingTime, routingTime) => {
                 /**
-                 * ! TODO: broken due to not counting in warps
-                 * 
                  * The numbers in data.js are in meters, or blocks, 
                  * so getting the distance between locations is very easy by doing this.
                  * 
@@ -547,19 +556,17 @@
                  * @returns {number} the number of blocks between two adjacent nodes
                 */
                 const getDistanceBetween = (from, to) => {
-                    let searchData = routes[from][1] // This registers as an any type, but its the routes variable in data.js
+                    let searchData = routes[from][1]
                     for (prop in searchData) {
                         let locationData = searchData[prop]
                         if (locationData[to] !== undefined) {
                             return locationData[to][1]
-                        } else {
-                            return 0
                         }
                     }
+                    // Past this point assume this is a warp and calculate the real distance
+                    return Math.hypot(routes[from][0][0] - routes[to][0][0], routes[from][0][1] - routes[to][0][1])
                 }
                 /**
-                 * ! TODO: broken due to it relying on getDistanceBetween()
-                 * 
                  * Gets the total distance of the route. 
                  * 
                  * @param {string[]} route
@@ -662,7 +669,10 @@
                             if (
                                 lineSections.length > 0 &&
                                 line !== undefined &&
-                                line[0][0] === lineSections[lineSections.length-1][1][0][0]
+                                // i hate this, but it will do.
+                                line[0][0] === lineSections[lineSections.length-1][1][0][0] &&
+                                line[0][1] === lineSections[lineSections.length-1][1][0][1] &&
+                                line[0][2] === lineSections[lineSections.length-1][1][0][2]
                             ) {
                                 lineSections[lineSections.length-1][0].push(array[index+1])
                             } else {
@@ -703,6 +713,38 @@
                     return totals
                 }
                 /**
+                 * @param {string} nodeName
+                 * @param {[any, any]} graph
+                 * 
+                 * @returns {string[]}
+                */
+                const calculateConnections = (nodeName, existingNames, graph) => {
+                    let nodeData = graph[1][nodeName]
+                    let exceptNames = []
+                    exceptNames.push("Outpost Warp","New Spawn Warp","Old Spawn Warp")
+                    existingNames.forEach((name) => {exceptNames.push(name)})
+                    // Get the lines
+                    let lineList = []
+                    for (prop in nodeData) {
+                        let routingData = nodeData[prop]
+                        for (line in routingData[0]) {
+                            let lineName = routingData[0][line]
+                            if (!lineList.includes(lineName) && !exceptNames.includes(lineName)) {
+                                lineList.push(lineName)
+                            }
+                        }
+                    }
+                    // Parse the lines
+                    let elementList = []
+                    for (line in lineList) {
+                        let lineName = lineList[line]
+                        let meta = lineMetadata(lineName)
+                        elementList.push(`<span class="line" style="background-color: ${meta.color[0]}; color: ${meta.color[1]};">${meta.altName}</span>`)
+                    }
+
+                    return elementList
+                }
+                /**
                  * @param {number} weight - The weight of the route, also the number of seconds that route will take. (meters / meters-per-second = seconds)
                  * 
                  * @returns {string}
@@ -731,7 +773,19 @@
                             `in ${stringifiedTime}`
                     )
                 }
-                
+                /**
+                 * @param {number} meters
+                 * 
+                 * @returns {string}
+                */
+                const distanceStringify = (meters) => {
+                    if (meters >= 1000) {
+                        return `${(meters/1000).toFixed(2)} km`
+                    } else {
+                        return `${Math.round(meters)} blocks`
+                    }
+                }
+
                 /**
                  * @param {{
                  *       distance: number
@@ -749,7 +803,7 @@
                         statusInjection.text(`There was an issue making the route: ${error[1]}`)
                     } else {
                         statusInjection.text(`
-                            Arriving ${secondStringify(totals.time)} and traveling ${totals.distance/1000}km.
+                            Arriving ${secondStringify(totals.time)} and traveling ${distanceStringify(totals.distance)}.
                             Route created in ${milliseconds}ms
                         `)
                     }
@@ -843,14 +897,26 @@
                         if (otherNodes.length > 0) {
                             nodeText = `<p style="padding-bottom: 5px">You will pass these locations:</p>`
                             otherNodes.forEach((node, index) => {
-                                nodes.push(`
+
+                                let connections = calculateConnections(node, routeNames, graph)
+                                if (connections.length === 0) {
+                                    nodes.push(`
                                     <p>
                                         <span class="station">${node}</span><br>
-                                        ${distances[index]/1000}km; ${secondStringify(distances[index]/getSpeeds()[method])}<br>
-                                        Connections to <span class="line" style="background-color: ${colors[0][0]}; color: ${colors[0][1]};">${routeNames[0]}</span>
+                                        ${distanceStringify(distances[index])}; ${secondStringify(distances[index]/getSpeeds()[method])}
                                     </p>
                                     <br>
                                 `)
+                                } else {
+                                    nodes.push(`
+                                    <p>
+                                        <span class="station">${node}</span><br>
+                                        ${distanceStringify(distances[index])}; ${secondStringify(distances[index]/getSpeeds()[method])}<br>
+                                        Connections to ${connections.map(node => `${node}`).join(" ")}
+                                    </p>
+                                    <br>
+                                `)
+                                }
                             })
                         }
 
@@ -884,7 +950,7 @@
                                 From <span class="station">${from}</span><br>
                                 Via ${lines.map(line => `${line}`).join("")}
                                 <p style="color: gray; font-size: x-small;">Operated by ${operator}</p><br>
-                                <p>Travel ${distance}km ${time}</p>
+                                <p>Travel ${distance} ${time}</p>
                                 <br>
                                 ${nodeText}
                                 ${nodes.map(node => `${node}`).join("")}
@@ -895,8 +961,6 @@
                     }
                     
                     const inject = $("#output-injection")
-                    // Clear all children before adding more
-                    inject.empty()
                     // Add the new routes
                     lines.forEach((route) => {
                         let nodes = route[0]
@@ -917,7 +981,7 @@
                         addLine(
                             colorData,
                             route[1][0],
-                            cascadeDistanceBetween(route[0])/1000,
+                            distanceStringify(cascadeDistanceBetween(route[0])),
                             secondStringify(cascadeTimeBetween(route[0], graph)),
                             otherNodes,
                             from,
@@ -934,6 +998,7 @@
                 let lines = cascadeLinesBetween(route, graph)
                 let totals = calculateTotals(lines, route, graph)
                 statusRender(totals, error, (graphingTime+routingTime))
+                $("#output-injection").empty()
                 if (lines.length !== 0) {textRender(lines, route, graph)}
             }
 
