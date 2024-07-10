@@ -163,7 +163,7 @@ const routes = {
                 //"Stonehelm": [["UV-OP-1", "UV-OP-2", "UV-VY"], 1200],
             },
             railways: {
-                "Seascrestia": [["UltraStar 1"], 1200, {
+                "Seacrestica": [["UltraStar 1"], 1200, {
                     currency: "Emerald",
                     price: 4,
                     pass: "SeaCard",
@@ -189,7 +189,7 @@ const routes = {
                 "UV-OP-203 UV-OP-2 Intersection": [["UV-OP-203"], 1200],
             },
             railways: {
-                "Seascrestia": [["UltraStar 2"], 1200, {
+                "Seacrestica": [["UltraStar 2"], 1200, {
                     currency: "Emerald",
                     price: 4,
                     pass: "SeaCard",
@@ -204,7 +204,7 @@ const routes = {
             },
         },
     ],
-    "Seascrestia": [
+    "Seacrestica": [
         [-1891664,-1893972],
         {
             railways: {
