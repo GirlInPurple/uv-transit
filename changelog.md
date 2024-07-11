@@ -21,3 +21,7 @@
   - UltraStar Express 1 and 2
   - UV-OP-1 between Banal-Witchita and Steambolt
   - The Entire New Spawn Metro system
+
+## 1.0.3
+
+- Added a dropdown menu for the road speed input.
