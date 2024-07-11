@@ -248,6 +248,20 @@ const routes = {
             iceways: {
                 "Rotherhythe": [["OPE Nord"], 8500],
                 "Hounderia": [["OPE Nord"], 1000],
+            },
+            railways: {
+                "Evergreen": [["UltraStar Express 2"], 2800, {
+                    currency: "Emerald",
+                    price: 4,
+                    pass: "SeaCard",
+                    passPrice: 2
+                }],
+                "Ekilorea": [["UltraStar Express 1"], 1800, {
+                    currency: "Emerald",
+                    price: 4,
+                    pass: "SeaCard",
+                    passPrice: 2
+                }]
             }
         },
     ],
@@ -280,6 +294,14 @@ const routes = {
             roadways: {
                 "UV-OP-1 Ekilorea Intersection": [["Road to Ekilorea Island"], 200],
             },
+            railways: {
+                "Banal-Witchita": [["UltraStar Express 1"], 1800, {
+                    currency: "Emerald",
+                    price: 4,
+                    pass: "SeaCard",
+                    passPrice: 2
+                }]
+            }
         },
     ],
     "Evergreen": [
@@ -291,6 +313,12 @@ const routes = {
             },
             railways: {
                 "Outpost": [["UltraStar 1"], 1600, {
+                    currency: "Emerald",
+                    price: 4,
+                    pass: "SeaCard",
+                    passPrice: 2
+                }],
+                "Banal-Witchita": [["UltraStar Express 1"], 2800, {
                     currency: "Emerald",
                     price: 4,
                     pass: "SeaCard",
