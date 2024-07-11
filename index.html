@@ -78,7 +78,7 @@
                         <input type="checkbox" checked name="use-minecarts" id="use-minecarts"><label for="use-minecarts">Use Minecarts</label><br>
                         <input type="checkbox" checked name="use-boatways" id="use-boatways"><label for="use-boatways">Use Boatways/Waterways</label><br>
                         <input type="checkbox" checked name="use-roadways" id="use-roadways"><label for="use-roadways">Use Roadways</label><br>
-                        <input type="number" placeholder="10" name="roads-as" id="roads-as"><label for="roads-as">Road Speed (m/s)</label><br>
+                        <input type="number" placeholder="10" name="roads-as" id="roads-as" list="speedlist"><label for="roads-as">Road Speed (m/s)</label><br>
                     </details>
                     <details><summary>Experimental</summary>
                         <p class="small">
@@ -123,6 +123,13 @@
             </p>
         </div>
     </div>
+    <datalist id="speedlist">
+        <option value="5.6">5.6 (Sprinting)</option>
+        <option value="4.3">4.3 (Walking)</option>
+        <option value="7">7.0 (Sprint-jumping)</option>
+        <option value="9.5">9.5 (Average horse speed)</option>
+        <option value="14">14.0 (Max. horse speed)</option>
+    </datalist>
     <script>
         
         jQuery(() => {
