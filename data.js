@@ -72,7 +72,7 @@ let places = {
     "WestHaven": "old-spawn",
     "Willichburg": "old-spawn",
     "Wolven": "old-spawn",
-}
+};
 
 /**
  * Metadata for all the named methods of transport.
@@ -231,7 +231,7 @@ const methodMetadata = {
         color:["#864663","white"],
         operator:"Server Staff"
     },
-}
+};
 
 /**
  * All possible routes between locations, in a semi-human readable format.
@@ -617,4 +617,4 @@ const routes = {
             },
         },
     ],
-}
+};
