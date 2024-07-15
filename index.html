@@ -29,13 +29,13 @@
                     are in the process of creating transit infrastructure across the server, currently spanning just over 100KM!
                     <br>
                     More info on the transit system at large can be found <a href="/">here</a>, and a tutorial on how to use this
-                    page can be viewed <a href="/">here</a>. For technical info, head to the <a href="https://github.com/GirlInPurple/uv-transit/">Github repository</a> and read the <a href="https://github.com/GirlInPurple/uv-transit/blob/master/README.md">read-me</a> file.
+                    page can be viewed <a href="/">here</a>. For technical info, head to the <a href="https://github.com/GirlInPurple/uv-transit/">Github repository</a> and read the <a href="https://github.com/GirlInPurple/uv-transit/blob/master/technical.md">technical.md</a> file.
                     <br>
                 </p>
             </div>
             <div>
                 <p style="text-align: center;">
-                    Version 1.0.3, Last Updated <abbr title="11th of July, 2024, at 10:23 EST/USA East">10/07/2024</abbr><br>
+                    Version 1.1.0, Last Updated 10/07/2024<sup>D/M/Y</sup><br>
                     Changelog available <a href="https://github.com/GirlInPurple/uv-transit/blob/master/changelog.md">here</a>
                 </p>
             </div>
@@ -43,18 +43,24 @@
                 <table style="width: 350px;">
                     <tbody>
                         <tr>
-                            <td><select name="from" id="from" class="in-table">
-                                    <option value=undefined>Pick a location...</option>
-                                </select></td>
+                            <td>
+                                <input type="text" name="from" id="from" class="in-table" list="from-list">
+                                </input>
+                                <datalist id="from-list">
+                                </datalist>
+                            </td>
                             <td>- From</td>
                             <td rowspan="2">
                                 <button id="flip-button">Swap</button>
                             </td>
                         </tr>
                         <tr>
-                            <td><select name="to" id="to" class="in-table">
-                                    <option value=undefined>Pick a location...</option>
-                                </select></td>
+                            <td>
+                                <input type="text" name="to" id="to" class="in-table" list="to-list">
+                                </input>
+                                <datalist id="to-list">
+                                </datalist>
+                            </td>
                             <td>- To</td>
                         </tr>
                     </tbody>
@@ -71,7 +77,7 @@
                         <input type="checkbox" name="have-EasyPass" id="have-easypass"><label for="have-easypass">I have a UVDOT EasyPass</label><br>
                     </details>
                     <details open><summary>Method Preferences</summary>
-                        <input type="checkbox" checked name="use-warps" id="use-warps"><label for="use-warps">Use Warp Commands</label><br>
+                        <input type="checkbox" name="use-warps" id="use-warps"><label for="use-warps">Use Warp Commands</label><br>
                         <input type="checkbox" checked name="use-nether" id="use-nether"><label for="use-nether">Use Nether</label><br>
                         <input type="checkbox" checked name="use-iceways" id="use-iceways"><label for="use-iceways">Use Iceways</label><br>
                         <input type="checkbox" checked name="use-pistonbolt" id="use-pistonbolt"><label for="use-pistonbolt">Use Pistonbolts</label><br>
@@ -79,13 +85,20 @@
                         <input type="checkbox" checked name="use-boatways" id="use-boatways"><label for="use-boatways">Use Boatways/Waterways</label><br>
                         <input type="checkbox" checked name="use-roadways" id="use-roadways"><label for="use-roadways">Use Roadways</label><br>
                         <input type="number" placeholder="10" name="roads-as" id="roads-as" list="speedlist"><label for="roads-as">Road Speed (m/s)</label><br>
+                        <datalist id="speedlist">
+                            <option value="5.6">Sprinting (5.6)</option>
+                            <option value="4.3">Walking (4.3)</option>
+                            <option value="7">Sprint-jumping (7.0)</option>
+                            <option value="9.5">Average horse speed (9.5)</option>
+                            <option value="14">Max. horse speed (14.0)</option>
+                        </datalist>
                     </details>
                     <details><summary>Experimental</summary>
                         <p class="small">
-                            Check this option if you have a large crowd going to a single location. 
-                            This blocks the use of certain train stations and nether highways that make cause traffic jams or be too slow if too many people use it at once.
+                            This option makes the router prefer AFK-able transit, like Iceways, Pistonbolts, Minecarts, etc.
+                            While Iceways aren't necessarily AFK-able, you can hold down the W key with a Python script, mod, or a weight.
                         </p>
-                        <input type="checkbox" name="large-crowd" id="large-crowd"><label for="large-crowd">I have a Large Crowd</label><br>
+                        <input type="checkbox" name="large-crowd" id="large-crowd"><label for="large-crowd">Prefer AFK-able Transit</label><br>
                         <p class="small">
                             Warps commands like /warp olympics are still active long after the event is over. 
                             This option enables some warp commands that may or may not be disabled by the time you use them.
@@ -117,29 +130,34 @@
         <div class="container footer">
             <p>
                 This site is not associated with the higher ups at UltraVanilla, nor Mojang AB or Microsoft Inc. 
-                All in-game towns, groups, or other locations mentioned are also their own entity and reserve the right to ask to be added or removed from this page.
-                Please open a Github issue or contact DJzombiehunter in-game to have your town/group/location added/removed/modified.
+                All in-game towns, groups, or other locations mentioned are also their own legal entity and reserve the right to ask to be added or removed from this page.
+                Please open a Github issue or contact DJzombiehunter in-game or on Discord to for removal/addition requests. Most locations have been added automatically.
                 Also, this site is <a style="color:cornflowerblue;" href="https://github.com/GirlInPurple/uv-transit">open-source</a>.
             </p>
         </div>
     </div>
-    <datalist id="speedlist">
-        <option value="5.6">Sprinting (5.6)</option>
-        <option value="4.3">Walking (4.3)</option>
-        <option value="7">Sprint-jumping (7.0)</option>
-        <option value="9.5">Average horse speed (9.5)</option>
-        <option value="14">Max. horse speed (14.0)</option>
-    </datalist>
     <script>
         
         jQuery(() => {
-            // Dropdowns
-            ["from","to"].forEach((eleName) => {
+            // Dropdown Data
+            ["from-list","to-list"].forEach((eleName) => {
                 let ele = $(`#${eleName}`)
 
                 for (townName in places) {
-                    ele.append('<option class="' + places[townName] + '" value="' + townName + '">' + townName + '</option>')
+                    if ("TODO".includes(townName)) {
+                        // This will be modified to add the visible-nonvisible distinction back in,
+                        // as this change broke that feature completely
+                        continue;
+                    } else {
+                        ele.append('<option class="' + places[townName] + '" value="' + townName + '">' + places[townName] + '</option>')
+                    }
                 }
+            })
+            /*
+            // Dropdown Save
+            // Currently Broken
+            ["from","to"].forEach((eleName) => {
+                let ele = $(`#${eleName}`)
 
                 ele.on("change", () => {
                     console.debug(`Set ${eleName} to ${ele.val()} in LocalStorage`)
@@ -148,6 +166,7 @@
 
                 ele.val(localStorage.getItem(eleName))
             })
+            */
             // Toggle for if Roadways are on
             $("#use-roadways").on("change", () => {
                 let ele = $("#roads-as")
@@ -704,7 +723,8 @@
                     return {
                         color: md.color,
                         altName: (md.altName === undefined) ? line : md.altName,
-                        operator: md.operator
+                        operator: md.operator,
+                        extraText: md.extraText
                     }
                 }
                 /**
@@ -728,7 +748,7 @@
                 const calculateConnections = (nodeName, existingNames, graph) => {
                     let nodeData = graph[1][nodeName]
                     let exceptNames = []
-                    exceptNames.push("Outpost Warp","New Spawn Warp","Old Spawn Warp")
+                    transfers.forEach((name) => {exceptNames.push(name)})
                     existingNames.forEach((name) => {exceptNames.push(name)})
                     // Get the lines
                     let lineList = []
@@ -745,8 +765,10 @@
                     let elementList = []
                     for (line in lineList) {
                         let lineName = lineList[line]
-                        let meta = lineMetadata(lineName)
-                        elementList.push(`<span class="line" style="background-color: ${meta.color[0]}; color: ${meta.color[1]};">${meta.altName}</span>`)
+                        if (lineName != "" || lineName != undefined) {
+                            let meta = lineMetadata(lineName)
+                            elementList.push(`<span class="line" style="background-color: ${meta.color[0]}; color: ${meta.color[1]};">${meta.altName}</span>`)
+                        }
                     }
 
                     return elementList
@@ -887,16 +909,19 @@
                         return `${textList[choice]} ${append}`
                     }
                     /**
-                     * @param {string[][]} colors
-                     * @param {string[]} routeNames
-                     * @param {number} distance
-                     * @param {number} time
-                     * @param {any} otherNodes
-                     * @param {string} from
-                     * @param {string} to
-                     * @param {string} operator
+                     * @param {string[][]} colors - The colors used by this section of the route
+                     * @param {string[]} routeNames - The Alternative/Human-Friendly version of the route's names used
+                     * @param {string[]} realNames - The real names of the routes used
+                     * @param {number} distance -  The distance in meters this section crosses
+                     * @param {number} time - The time in seconds this section will take
+                     * @param {any} otherNodes - A list of nodes along the route 
+                     * @param {string} from - The location coming from
+                     * @param {string} to - The location going to
+                     * @param {string} operator - The company or group operating this section
+                     * @param {string} method - The method of transport used by this route
+                     * @param {string} extraText - Any extra text gathered from the node
                     */
-                    const addLine = (colors, routeNames, distance, time, otherNodes, from, to, operator, method) => {
+                    const addLine = (colors, routeNames, realNames, distance, time, otherNodes, from, to, operator, method, extraText) => {
                         // Handling for the extra nodes
                         let nodeText = ""
                         let nodes = []
@@ -905,7 +930,7 @@
                             nodeText = `<p style="padding-bottom: 5px">You will pass these locations:</p>`
                             otherNodes.forEach((node, index) => {
 
-                                let connections = calculateConnections(node, routeNames, graph)
+                                let connections = calculateConnections(node, realNames, graph)
                                 if (connections.length === 0) {
                                     nodes.push(`
                                     <p>
@@ -930,10 +955,27 @@
                         // Handling for the "Via..." section
                         let lines = []
                         routeNames.forEach((name, index) => {
-                            lines.push(`
-                                <span class="line" style="background-color: ${colors[index][0]}; color: ${colors[index][1]};">${name}</span>
-                            `)
+                            if (name.length !== 0) {
+                                lines.push(`
+                                    <span class="line" style="background-color: ${colors[index][0]}; color: ${colors[index][1]};">${name}</span>
+                                `)
+                            }
                         })
+                        let via = ""
+                        if (lines.length > 0) {
+                            via = "Via"
+                        }
+
+                        // Handling for the Operator section
+                        let oper = ""
+                        if (lines.length > 0) {
+                            oper = `<p style="color: gray; font-size: x-small;">Operated by ${operator}</p>`
+                        }
+
+                        // Handling for the extraText section
+                        let instructionText = (extraText !== undefined) ? 
+                            `<p>${extraText}</p><br>` :
+                            ""
 
                         // Handling for styles
                         let borderStyle = "solid"
@@ -955,11 +997,11 @@
                         inject.append(`
                             <div class="route-box" style="border-color: ${colors[0][0]}; border-left-style: ${borderStyle};">
                                 From <span class="station">${from}</span><br>
-                                Via ${lines.map(line => `${line}`).join("")}
-                                <p style="color: gray; font-size: x-small;">Operated by ${operator}</p><br>
+                                ${via} ${lines.map(line => `${line}`).join("")}
+                                ${oper}<br>
                                 <p>Travel ${distance} ${time}</p>
                                 <br>
-                                ${nodeText}
+                                ${instructionText}
                                 ${nodes.map(node => `${node}`).join("")}
                                 To <span class="station">${to}</span>
                             </div>
@@ -969,7 +1011,7 @@
                     
                     const inject = $("#output-injection")
                     // Add the new routes
-                    lines.forEach((route) => {
+                    lines.forEach((route, index, array) => {
                         let nodes = route[0]
                         let from = nodes[0]
                         let to = nodes[nodes.length-1]
@@ -981,12 +1023,15 @@
                         })
 
                         let colorData = []
+                        let nameData =[]
                         lineData.forEach((line) => {
                             colorData.push(line.color)
+                            nameData.push(line.altName)
                         })
 
                         addLine(
                             colorData,
+                            nameData,
                             route[1][0],
                             distanceStringify(cascadeDistanceBetween(route[0])),
                             secondStringify(cascadeTimeBetween(route[0], graph)),
@@ -994,7 +1039,8 @@
                             from,
                             to,
                             lineData[0].operator,
-                            route[1][1]
+                            route[1][1],
+                            lineData[0].extraText
                         )
                     })
                     inject.css("display","block")

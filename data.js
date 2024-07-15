@@ -1,4 +1,4 @@
-//! Please read the entire README.md file before attempting to edit this.
+//! Please read the entire technical.md file before attempting to edit this.
 //! I would prefer you make an issue instead if you want something added.
 
 /**
@@ -73,6 +73,17 @@ let places = {
     "Willichburg": "old-spawn",
     "Wolven": "old-spawn",
 }
+
+/**
+ * A list of all the transfer routes, alongside the warps.
+ * Used to block the renderer from displaying unnecessary connections.
+*/
+const transfers = [
+    // Warps
+    "Outpost Warp","New Spawn Warp","Old Spawn Warp",
+    // Transfers
+    "Outpost UltraStar Station Main Entrance",
+]
 
 /**
  * Metadata for all the named methods of transport.
@@ -231,6 +242,31 @@ const methodMetadata = {
         color:["#864663","white"],
         operator:"Server Staff"
     },
+    // Transfers
+    "Outpost UltraStar Station Main Entrance":{
+        color:["#ab92bf","white"],
+        operator:"Seacrestica Transports Outpost",
+        altName:"Main Entrance",
+        extraText:"Going in, take the copper spiral staircase near the warp spot down to around Y -30, the station should be in front of you.<br>Coming out, go up that staircase to around Y 60 and look to your left."
+    },
+    // Transfers
+    "Evergreen UltraStar Station Main Entrance":{
+        color:["#ab92bf","white"],
+        operator:"Seacrestica Transports Outpost",
+        altName:"Main Entrance"
+    },
+    // Transfers
+    "Banal-Witchita UltraStar Station Main Entrance":{
+        color:["#ab92bf","white"],
+        operator:"Seacrestica Transports Outpost",
+        altName:"Main Entrance"
+    },
+    // Transfers
+    "Ekilorea UltraStar Station Main Entrance":{
+        color:["#ab92bf","white"],
+        operator:"Seacrestica Transports Outpost",
+        altName:"Main Entrance"
+    },
 }
 
 /**
@@ -249,19 +285,8 @@ const routes = {
                 "Rotherhythe": [["OPE Nord"], 8500],
                 "Hounderia": [["OPE Nord"], 1000],
             },
-            railways: {
-                "Evergreen": [["UltraStar Express 2"], 2800, {
-                    currency: "Emerald",
-                    price: 4,
-                    pass: "SeaCard",
-                    passPrice: 2
-                }],
-                "Ekilorea": [["UltraStar Express 1"], 1800, {
-                    currency: "Emerald",
-                    price: 4,
-                    pass: "SeaCard",
-                    passPrice: 2
-                }]
+            walkways: {
+                "Banal-Witchita UltraStar Station": [["Banal-Witchita UltraStar Station Main Entrance"], 150],
             }
         },
     ],
@@ -294,13 +319,8 @@ const routes = {
             roadways: {
                 "UV-OP-1 Ekilorea Intersection": [["Road to Ekilorea Island"], 200],
             },
-            railways: {
-                "Banal-Witchita": [["UltraStar Express 1"], 1800, {
-                    currency: "Emerald",
-                    price: 4,
-                    pass: "SeaCard",
-                    passPrice: 2
-                }]
+            walkways: {
+                "Ekilorea UltraStar Station": [["Ekilorea UltraStar Station Main Entrance"], 200],
             }
         },
     ],
@@ -310,25 +330,16 @@ const routes = {
             roadways: {
                 "UV-OP-201 UV-OP-2 Intersection": [["UV-OP-201"], 1500],
                 "UV-OP-1 UV-VY Intersection": [["UV-OP-1"], 1000],
-            },
-            railways: {
-                "Outpost": [["UltraStar 1"], 1600, {
-                    currency: "Emerald",
-                    price: 4,
-                    pass: "SeaCard",
-                    passPrice: 2
-                }],
-                "Banal-Witchita": [["UltraStar Express 1"], 2800, {
-                    currency: "Emerald",
-                    price: 4,
-                    pass: "SeaCard",
-                    passPrice: 2
-                }]
+
+                "Outpost": [["UV-OP-1"], 1300],
             },
             iceways: {
                 "Stonehelm": [["OPE Nord"], 2400],
                 "Hounderia": [["OPE Nord"], 1700],
             },
+            walkways: {
+                "Evergreen UltraStar Station": [["Evergreen UltraStar Station Main Entrance"], 150],
+            }
         },
     ],
     "Hounderia": [
@@ -421,30 +432,18 @@ const routes = {
                 "Evergreen": [["UV-OP-1"], 1300],
                 "Stonehelm": [["UV-OP-1", "UV-OP-2"], 800],
             },
-            railways: {
-                "Seacrestica": [["UltraStar 1"], 2000, {
-                    currency: "Emerald",
-                    price: 4,
-                    pass: "SeaCard",
-                    passPrice: 2
-                }],
-                "Evergreen": [["UltraStar 2"], 1600, {
-                    currency: "Emerald",
-                    price: 4,
-                    pass: "SeaCard",
-                    passPrice: 2
-                }],
-                "Malus": [["UltraStar 3"], 5000, {
-                    currency: "Emerald",
-                    price: 4,
-                    pass: "SeaCard",
-                    passPrice: 2
-                }]
-            },
             iceways: {
                 "La Cueva": [["OPE Ouest"], 3800],
                 "Stonehelm": [["OPE Nord"], 880],
             },
+            walkways: {
+                "Outpost UltraStar Station": [["Outpost UltraStar Station Main Entrance"], 150, {
+                    currency: "Emerald",
+                    price: 4,
+                    pass: "SeaCard",
+                    passPrice: 2
+                }],
+            }
         },
     ],
     "Pagasa City": [
@@ -538,6 +537,18 @@ const routes = {
         }
     ],
     // Cannot be selected, but are still valid nodes
+    "Banal-Witchita UltraStar Station": [
+        [-1890899,-1896049],
+        {
+            railways: {
+                "Evergreen UltraStar Station": [["UltraStar Express 2"], 2800],
+                "Ekilorea UltraStar Station": [["UltraStar Express 1"], 1800]
+            },
+            walkways: {
+                "Banal-Witchita": [["Banal-Witchita UltraStar Station Main Entrance"], 150],
+            }
+        }
+    ],
     "Central Polaris": [
         [-1894664,-1894940],
         {
@@ -548,6 +559,30 @@ const routes = {
                 "Northern Borealis": [["UV-NS-204"], 150],
             },
         },
+    ],
+    "Ekilorea UltraStar Station": [
+        [-1888320,-1899676],
+        {
+            
+            railways: {
+                "Banal-Witchita UltraStar Station": [["UltraStar Express 1"], 1800]
+            },
+            walkways: {
+                "Ekilorea": [["Ekilorea UltraStar Station Main Entrance"], 150],
+            }
+        },
+    ],
+    "Evergreen UltraStar Station": [
+        [-1890899,-1896049],
+        {
+            railways: {
+                "Outpost UltraStar Station": [["UltraStar 1"], 1600],
+                "Banal-Witchita UltraStar Station": [["UltraStar Express 1"], 2800]
+            },
+            walkways: {
+                "Evergreen": [["Evergreen UltraStar Station Main Entrance"], 150],
+            }
+        }
     ],
     "Southern Polaris": [
         [-1894664,-1894940],
@@ -575,6 +610,20 @@ const routes = {
                 "Borealis": [["Spawn Purple Line"], 450],
             },
         },
+    ],
+    "Outpost UltraStar Station": [
+        [-1890764,-1894658],
+        {
+            railways: {
+                "Seacrestica UltraStar Station": [["UltraStar 1"], 2000],
+                "Evergreen UltraStar Station": [["UltraStar 2"], 1600],
+                "Malus UltraStar Station": [["UltraStar 3"], 5000]
+            },
+            walkways: {
+                "Outpost": [["Outpost UltraStar Station Main Entrance"], 150],
+            }
+        }
+
     ],
     "UV-OP-1 UV-VY Intersection": [
         [-1893230,-1895039],
