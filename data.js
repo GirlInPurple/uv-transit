@@ -72,7 +72,7 @@ let places = {
     "WestHaven": "old-spawn",
     "Willichburg": "old-spawn",
     "Wolven": "old-spawn",
-}
+};
 
 /**
  * A list of all the transfer routes, alongside the warps.
@@ -267,7 +267,7 @@ const methodMetadata = {
         operator:"Seacrestica Transports Outpost",
         altName:"Main Entrance"
     },
-}
+};
 
 /**
  * All possible routes between locations, in a semi-human readable format.
@@ -666,4 +666,4 @@ const routes = {
             },
         },
     ],
-}
+};
