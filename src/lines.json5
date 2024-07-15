@@ -1,0 +1,180 @@
+{
+  // Outpost Roadways
+  "UV-OP-1": {
+    color: ["#008080", "white"],
+    operator: "UVDOT Outpost Division",
+  },
+  "UV-OP-2": {
+    color: ["#009090", "white"],
+    operator: "UVDOT Outpost Division",
+  },
+  "UV-OP-201": {
+    color: ["#0090a0", "white"],
+    operator: "UVDOT Outpost Division",
+  },
+  "UV-OP-203": {
+    color: ["#0090b0", "white"],
+    operator: "UVDOT Outpost Division",
+  },
+  // New Spawn Roadways
+  "UV-NS-1": {
+    color: ["#9fa4d8", "black"],
+    operator: "UVDOT New Spawn Division",
+  },
+  "UV-NS-2": {
+    color: ["#9aa2d0", "black"],
+    operator: "UVDOT New Spawn Division",
+  },
+  "UV-NS-202": {
+    color: ["#b6bff6", "black"],
+    operator: "UVDOT New Spawn Division",
+  },
+  "UV-NS-204": {
+    color: ["#bcc1ff", "black"],
+    operator: "UVDOT New Spawn Division",
+  },
+  // Old Spawn Roadways
+  "UV-OS-1": {
+    color: ["#a0a0a0", "black"],
+    operator: "UVDOT Old Spawn Division",
+  },
+  // Misc. Roadways
+  "UV-VY": {
+    altName: "The Voyaway",
+    color: ["#ffff00", "black"],
+    operator: "UVDOT",
+  },
+  "Road to Ekilorea Island": {
+    color: ["#b76b39", "white"],
+    operator: "Town of Ekilorea",
+  },
+  "Unlabeled Roadway": {
+    color: ["black", "white"],
+    operator: "Unknown",
+  },
+  // Trains
+  "UltraStar 1": {
+    color: ["#ab92bf", "white"],
+    operator: "Seacrestica Transports Outpost",
+  },
+  "UltraStar 2": {
+    color: ["#8c49c4", "white"],
+    operator: "Seacrestica Transports Outpost",
+  },
+  "UltraStar 3": {
+    color: ["#ab92bf", "white"],
+    operator: "Seacrestica Transports Outpost",
+  },
+  "UltraStar 4": {
+    color: ["#8c49c4", "white"],
+    operator: "Seacrestica Transports Outpost",
+  },
+  "UltraStar Express 1": {
+    color: ["#055d52", "white"],
+    operator: "Seacrestica Transports Outpost",
+  },
+  "UltraStar Express 2": {
+    color: ["#089180", "white"],
+    operator: "Seacrestica Transports Outpost",
+  },
+  // Outpost Iceways
+  "OPE Ouest": {
+    color: ["#cc0000", "white"],
+    operator: "OPC",
+  },
+  "OPE Est": {
+    color: ["#00ccb8", "black"],
+    operator: "OPC",
+  },
+  "OPE Sud": {
+    color: ["#334eff", "white"],
+    operator: "OPC",
+  },
+  "OPE Nord": {
+    color: ["#119c07", "white"],
+    operator: "OPC",
+  },
+  // New Spawn Iceways
+  "Spawn Red Line": {
+    color: ["#ff0000", "white"],
+    operator: "Unknown",
+  },
+  "Spawn Yellow Line": {
+    color: ["#f7eb00", "white"],
+    operator: "Unknown",
+  },
+  "Spawn Aqua Line": {
+    color: ["#00feed", "black"],
+    operator: "Unknown",
+  },
+  "Spawn Purple Line": {
+    color: ["#8800f7", "white"],
+    operator: "Unknown",
+  },
+  "Spawn Green Line": {
+    color: ["#059100", "white"],
+    operator: "Unknown",
+  },
+  "Spawn Orange Line": {
+    color: ["#ff9100", "white"],
+    operator: "Unknown",
+  },
+  "Spawn Pink Line": {
+    color: ["#f262ff", "white"],
+    operator: "Unknown",
+  },
+  "Spawn Blue Line": {
+    color: ["#0040fe", "white"],
+    operator: "Unknown",
+  },
+  "Spawn Gold Line": {
+    color: ["#dea000", "white"],
+    operator: "Unknown",
+  },
+  "Spawn Silver Line": {
+    color: ["#c1e8ff", "black"],
+    operator: "USUV, Unknown",
+  },
+  // Warps
+  "Outpost Warp": {
+    color: ["#6ed8b8", "white"],
+    operator: "Server Staff",
+  },
+  "New Spawn Warp": {
+    color: ["#feff72", "black"],
+    operator: "Server Staff",
+  },
+  "Old Spawn Warp": {
+    color: ["#8b4f4f", "white"],
+    operator: "Server Staff",
+  },
+  "Olympics Warp": {
+    color: ["#864663", "white"],
+    operator: "Server Staff",
+  },
+  // Transfers
+  "Outpost UltraStar Station Main Entrance": {
+    color: ["#ab92bf", "white"],
+    operator: "Seacrestica Transports Outpost",
+    altName: "Main Entrance",
+    extraText: "Going in, take the copper spiral staircase near the warp spot down to around Y -30, the station should be in front of you.<br>Coming out, go up that staircase to around Y 60 and look to your left.",
+  },
+  // Transfers
+  "Evergreen UltraStar Station Main Entrance": {
+    color: ["#ab92bf", "white"],
+    operator: "Seacrestica Transports Outpost",
+    altName: "Main Entrance",
+  },
+  // Transfers
+  "Banal-Witchita UltraStar Station Main Entrance": {
+    color: ["#ab92bf", "white"],
+    operator: "Seacrestica Transports Outpost",
+    altName: "Main Entrance",
+  },
+  // Transfers
+  "Ekilorea UltraStar Station Main Entrance": {
+    color: ["#ab92bf", "white"],
+    operator: "Seacrestica Transports Outpost",
+    altName: "Main Entrance",
+  },
+}

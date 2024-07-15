@@ -1,0 +1,205 @@
+// UI Layout
+body,
+html {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Rubik", sans-serif;
+  font-size: 1.25em;
+}
+
+body > * {
+  box-sizing: inherit;
+  padding-left: 5%;
+  padding-right: 5%;
+  padding-bottom: 10%;
+  white-space: nowrap;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.logo {
+  background-color: #1c1c1c;
+  padding-bottom: 0%;
+  width: 100%;
+
+  img {
+    width: 7%;
+    display: block;
+    max-width: 99%;
+    background-color: inherit;
+  }
+}
+
+.content {
+  min-height: 1100px;
+  padding: 0% 5%;
+}
+
+.options,
+.output,
+.town-desc {
+  min-height: 50px;
+  padding: 0%;
+  width: 350px;
+}
+
+.options .margin {
+  * {
+    margin-left: 4.5px;
+  }
+
+  .container {
+    margin-left: 0;
+  }
+}
+
+.footer {
+  font-size: x-small;
+  color: white;
+  text-align: center;
+
+  & p {
+    width: 75%;
+    max-width: 450px;
+  }
+}
+
+// Highly Specific override classes
+.nowrap {
+  white-space: nowrap;
+}
+
+.small {
+  font-size: smaller;
+}
+
+// Input and Options
+input {
+  font-size: 1em;
+
+  &[type="checkbox"],
+  &[type="radio"] {
+    width: 1em;
+    height: 1em;
+  }
+
+  &[type="number"],
+  &[type="text"] {
+    width: 15em;
+    font-size: 50%;
+  }
+}
+
+button,
+input {
+  margin: 1%;
+  padding: 0%;
+  font: inherit;
+  color: inherit;
+}
+
+select {
+  height: 2em;
+  margin: 1%;
+  padding: 0%;
+  color: inherit;
+
+  &.in-table {
+    width: 200px;
+  }
+}
+
+// Text Related
+h1,
+h2,
+h3,
+p {
+  white-space: normal;
+  margin: 0%;
+}
+
+h2,
+h3 {
+  margin-bottom: 0%;
+  font-size: 1.2em;
+  font-weight: bold;
+}
+
+span {
+  font-size: smaller;
+  white-space: nowrap;
+}
+
+// Route Rendering
+.injection {
+  font-size: 0.7em;
+}
+
+.route-box {
+  border-left: 5px solid #ffffff;
+  padding-left: 5px;
+  padding-bottom: 5px;
+  padding-top: 5px;
+
+  & > * {
+    font-size: smaller;
+    white-space: normal;
+  }
+
+  & > span.line {
+    font-size: medium;
+    padding: 2px;
+  }
+
+  span.station {
+    font-size: large;
+    padding: 2px;
+  
+    background-color: rgb(0, 64, 109);
+    color: white;
+  }
+}
+
+// Regional Distinctions
+// These are technically still used, it just doesnt display properly due to the switch from option to datalist elements
+.outpost {
+  background-color: rgb(128, 128, 255);
+}
+
+.old-spawn {
+  background-color: rgb(255, 128, 128);
+}
+
+.new-spawn {
+  background-color: rgb(255, 255, 128);
+}
+
+// Scrollbar
+::-webkit-scrollbar {
+  width: 8px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  background-color: #d5d5d5;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #1c1c1c;
+
+  &:hover {
+    background-color: #5c5c5c;
+
+    &::-webkit-scrollbar {
+      opacity: 1;
+    }
+  }
+
+  &:active {
+    background-color: #3c3c3c;
+  }
+}

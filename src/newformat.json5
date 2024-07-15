@@ -1,0 +1,25 @@
+{
+  "Banal-Witchita": [
+    [-1890005, -1898735],
+    {
+      roadways: {
+        "UV-OP-1 Ekilorea Intersection": [["UV-OP-1", "UV-VY"], 1800],
+        "UV-OP-1 UV-VY Intersection": [["UV-OP-1", "UV-VY"], 2700],
+      },
+      iceways: {
+        Rotherhythe: [["OPE Nord"], 8500],
+        Hounderia: [["OPE Nord"], 1000],
+      },
+      walkways: {
+        "Banal-Witchita UltraStar Station": [
+          ["Banal-Witchita UltraStar Station Main Entrance"],
+          150,
+        ],
+      },
+    },
+    {
+        layer: "overworld",
+        region: "outpost"
+    },
+  ],
+}

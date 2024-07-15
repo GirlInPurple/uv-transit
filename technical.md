@@ -1,5 +1,8 @@
 # Technical Info
 
+This page explains all the technical info about the project, everything from the router, to the ui, to the underlying technologies this project uses.\
+Below is a table of contents, I recommend reading it in this order.
+
 - [Technical Info](#technical-info)
   - [Quick Overview](#quick-overview)
   - [The Node Graph](#the-node-graph)
