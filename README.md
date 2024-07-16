@@ -10,7 +10,7 @@ Licensed under AGPL v3 as to keep compatibility with [UltraVanilla/uvweb](https:
 
 All contributions are welcome! All I ask is you read the [technical explanation](./technical.md) first, as that will catch you up with the project.
 
-NPM and Node.js are required, and >= Python 3.6 for the [node manager](https://github.com/Niklas20114552/uvdot-editor) (Thanks Niklas!).\
+NPM and Node.js are required, and >= Python 3.8 for the [node manager](https://github.com/Niklas20114552/uvdot-editor) (Thanks Niklas!).\
 First run `npm i` to get all the dependencies,\
 then `npm run start` if you're editing the code, and `npm run build` to just build the app.\
 I recommend using VSCode's LiveServer plugin, but viewing it in a browser seems to work as well.
