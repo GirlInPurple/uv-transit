@@ -1,5 +1,5 @@
 import $ from 'jquery'
-import { getSpeeds, routes, lines } from './data'
+import { getSpeeds, routes, methodMetadata } from './data'
 
 const transfers = [
     // Warps
@@ -26,14 +26,14 @@ type totals = {
  * The rendering function, handles all the rendering of the routing output.
 */
 export const renderRoute = (
-    route: string[], 
-    graph: [any, any], 
-    error: [boolean, string | null], 
-    graphingTime: number, 
+    route: string[],
+    graph: [any, any],
+    error: [boolean, string | null],
+    graphingTime: number,
     routingTime: number
 ) => {
     /**
-     * The numbers in data.js are in meters, or blocks, 
+     * The numbers in data.js are in meters, or blocks,
      * so getting the distance between locations is very easy by doing this.
     */
     const getDistanceBetween = (from: string, to: string) => {
@@ -48,7 +48,7 @@ export const renderRoute = (
         return Math.hypot(routes[from][0][0] - routes[to][0][0], routes[from][0][1] - routes[to][0][1])
     }
     /**
-     * Gets the total distance of the route. 
+     * Gets the total distance of the route.
     */
     const cascadeDistanceBetween = (route: string[]) => {
         let totalDistance = 0
@@ -61,8 +61,8 @@ export const renderRoute = (
     }
     /**
      * ! TODO: broken due to it relying on getDistanceBetween()
-     * 
-     * Gets the total distance of the route. 
+     *
+     * Gets the total distance of the route.
     */
     const perStopDistanceBetween = (route: string[]) => {
         let totalDistance: number[] = []
@@ -142,7 +142,7 @@ export const renderRoute = (
      * Returns the metadata for that route's primary route.
     */
     const lineMetadata = (line: string): lineMeta => {
-        let md = lines[line]
+        let md = methodMetadata[line]
         return {
             color: md.color,
             altName: (md.altName === undefined) ? line : md.altName,
@@ -195,7 +195,7 @@ export const renderRoute = (
     }
     /**
      * @param {number} weight - The weight of the route, also the number of seconds that route will take. (meters / meters-per-second = seconds)
-     * 
+     *
      * @returns {string}
     */
     const secondStringify = (weight: number): string => {
@@ -304,8 +304,8 @@ export const renderRoute = (
         /**
          * @param {string[]} textList
          * @param {string} append
-         * 
-         * @returns {string} 
+         *
+         * @returns {string}
         */
         const getFlavorText = (textList: string[], append: string): string => {
             let notChosen = true
@@ -324,7 +324,7 @@ export const renderRoute = (
          * @param {string[]} realNames - The real names of the routes used
          * @param {number} distance -  The distance in meters this section crosses
          * @param {number} time - The time in seconds this section will take
-         * @param {any} otherNodes - A list of nodes along the route 
+         * @param {any} otherNodes - A list of nodes along the route
          * @param {string} from - The location coming from
          * @param {string} to - The location going to
          * @param {string} operator - The company or group operating this section

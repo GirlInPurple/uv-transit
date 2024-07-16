@@ -51,12 +51,16 @@ export default function internalRoute():{route: string[], graph: [any, any], pat
         }
 
         console.debug(graph, startNode, goalNode)
-        if (jQuery.isEmptyObject(graph) || startNode === null || goalNode === null) {
-            return { 
-                path: [], 
-                pathTook: null, 
-                reachable: false, 
-                reason: "The routing data was bad. This most likely means you didn\'t choose a start/end destination." 
+        if (
+					jQuery.isEmptyObject(graph) ||
+					startNode === null || startNode === "" ||
+					goalNode === null || goalNode === ""
+				) {
+            return {
+                path: [],
+                pathTook: null,
+                reachable: false,
+                reason: "The routing data was bad. This most likely means you didn\'t choose a start/end destination."
             }
         }
 
@@ -85,10 +89,10 @@ export default function internalRoute():{route: string[], graph: [any, any], pat
             let current:string = openSet.dequeue().key
 
             if (current === goalNode) {
-                return { 
-                    path: reconstructPath(cameFrom, current), 
-                    pathTook: cameFrom, 
-                    reachable: true, 
+                return {
+                    path: reconstructPath(cameFrom, current),
+                    pathTook: cameFrom,
+                    reachable: true,
                     reason: null }
             }
 
@@ -107,11 +111,11 @@ export default function internalRoute():{route: string[], graph: [any, any], pat
         }
 
         console.error('This route is impossible to complete. This most likely means you chose options in differing regions (Outpost and New Spawn are disconnected from Old Spawn), or your allowed methods are too restrictive.')
-        return { 
-            path: [], 
-            pathTook: null, 
-            reachable: false, 
-            reason: "This route is impossible to complete. This most likely means you chose options in differing regions (Outpost and New Spawn are disconnected from Old Spawn), your allowed methods are too restrictive, or the locations are not on the network yet." 
+        return {
+            path: [],
+            pathTook: null,
+            reachable: false,
+            reason: "This route is impossible to complete. This most likely means you chose options in differing regions (Outpost and New Spawn are disconnected from Old Spawn), your allowed methods are too restrictive, or the locations are not on the network yet."
         }
     }
 
@@ -132,11 +136,11 @@ export default function internalRoute():{route: string[], graph: [any, any], pat
 
 
     let beginAStarFn = performance.now()
-    let { 
-        path, 
-        pathTook, 
-        reachable, 
-        reason 
+    let {
+        path,
+        pathTook,
+        reachable,
+        reason
     } = aStar(
         processedGraph,
         //@ts-ignore

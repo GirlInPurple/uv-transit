@@ -2,7 +2,6 @@ const path = require('path');
 
 module.exports = {
     entry: './src/main.ts',
-    mode: 'development',
     module: {
         rules: [
             {
@@ -18,15 +17,6 @@ module.exports = {
                       options: { name: "style-bundle.css" },
                     },
                     'sass-loader'
-                ],
-            },
-            {
-                test: /\.json5$/,
-                type: 'javascript/auto',
-                use: [
-                    {
-                        loader: 'json5-loader',
-                    },
                 ],
             },
         ],

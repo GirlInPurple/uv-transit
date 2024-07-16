@@ -37,17 +37,19 @@ jQuery(() => {
     $("#use-roadways").on("change", () => {
         let ele = $("#roads-as")
         if ($("#use-roadways").is(":checked")) {
-            //@ts-ignore
+            //@ts-expect-error
             ele.attr("disabled", false)
         } else {
-            //@ts-ignore
+            //@ts-expect-error
             ele.attr("disabled", true)
         }
     })
     // Flip the to-from selections
     $("#flip-button").on("click", () => {
-        let from: any = $("#from").val()
-        let to: any = $("#to").val()
+				// TS doesnt like the typing of .val()
+				// but its supposed to return a string
+        let from:string|any = $("#from").val()
+        let to:string|any = $("#to").val()
         $("#from").val(to)
         $("#to").val(from)
     })
@@ -56,8 +58,7 @@ jQuery(() => {
         route()
     })
     // If Enter, route()
-    //@ts-ignore
-    $(this).on("keypress", (event) => {
+    $(document).on("keypress", (event) => {
         if (event.key === "Enter") {
             route()
         }
@@ -66,7 +67,7 @@ jQuery(() => {
     $("#status-injection").text("No route has been calculated yet")
 })
 
-function route() {
+const route = () => {
     let beginRoutingFn = performance.now()
 
     let { route, graph, path, error, routingTime, graphingTime } = internalRoute()
