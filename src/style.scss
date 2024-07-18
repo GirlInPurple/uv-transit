@@ -79,6 +79,10 @@ body > * {
   font-size: smaller;
 }
 
+.inline {
+	display: inline;
+}
+
 // Input and Options
 input {
   font-size: 1em;
@@ -92,7 +96,12 @@ input {
   &[type="number"],
   &[type="text"] {
     width: 15em;
-    font-size: 50%;
+
+		&.in-table {
+			font-size: 75%;
+			width: 210px;
+			margin-right: 10px;
+		}
   }
 }
 
@@ -131,7 +140,7 @@ h3 {
   font-weight: bold;
 }
 
-span {
+* span {
   font-size: smaller;
   white-space: nowrap;
 }
@@ -160,24 +169,59 @@ span {
   span.station {
     font-size: large;
     padding: 2px;
-  
-    background-color: rgb(0, 64, 109);
-    color: white;
   }
 }
 
 // Regional Distinctions
 // These are technically still used, it just doesnt display properly due to the switch from option to datalist elements
+// Considering Firefox only recently added support for them its unlikely this will work as intended any time soon
+// As of 2.0.1 these have been added to the rendering engine
 .outpost {
-  background-color: rgb(128, 128, 255);
+  background: linear-gradient(to left, #003950, #00743a);
+	color: #fff;
 }
 
 .old-spawn {
+	// the region in and around Old Spawn
   background-color: rgb(255, 128, 128);
+	color: #000;
 }
 
 .new-spawn {
+	// The region in and around New Spawn
   background-color: rgb(255, 255, 128);
+	color: #000;
+}
+
+.rendezvous {
+	// The area in and immediately around Rendezvous Point, a town thats (going to be) created by UVDOT
+	// Within 1-2km of city center, everything else counts as wilderness
+  background-color: rgb(255, 206, 132);
+	color: #000;
+}
+
+.wilderness {
+	// Any town or city too far from one of the regions above to be considered within their sphere of influence
+  background-color: rgb(164, 255, 128);
+	color: #000;
+}
+
+// Currency Distinctions
+// Used by the rendering engine when showing tolls
+// Keep the capitalization!
+.Emerald {
+	background-color: #82f6ad;
+	color: #000;
+}
+
+.Diamond {
+	background-color: #a1fbe8;
+	color: #000;
+}
+
+.SeaCard {
+	background-color: #008080;
+	color: #fff;
 }
 
 // Scrollbar

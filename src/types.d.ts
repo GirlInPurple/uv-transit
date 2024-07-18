@@ -1,9 +1,76 @@
 /**
- * Make TypeScript recognize json5 files as generic value containers.
- * Not exactly the best way of doing this, but it will do for now.
- * https://github.com/dominique-mueller/create-react-app-typescript-json5-setup
- */
-declare module '*.json5' {
-    const value: any
-    export default value
+ * Stores data about tolls
+*/
+declare type tollType = {
+	currency:string
+	price:number
+	pass:string
+	passPrice:number
+}
+
+/**
+ * Contains the name of the node, and data about is connection
+*/
+declare type routeNodeType = {
+	[targetName:string]:[
+		string[],
+		number,
+		tollType?,
+		string?
+	]
+}
+
+/**
+ * Contains a instances of a connection between 2 nodes, sorted by methods
+*/
+declare type routesContainer = {
+	[method:string]:routeNodeType
+}
+
+/**
+ * Contains data about a node
+*/
+declare type routeType = {
+	[nodeName:string]:[
+		[number, number],
+		routesContainer,
+		{
+			layer:string
+			region:string
+		}?
+	]
+}
+
+/**
+ * Contains data about a line
+*/
+declare type metadataType = {
+		altName?:string
+		color:[string,string]
+		operator:string
+		transfer?:boolean
+}
+
+/**
+ * Stores data about lines, sorted by it's name
+*/
+declare type metadataContainer = {
+	[lineName:string]:metadataType
+}
+
+/**
+ * Typing for the output of graph compiling
+ * Work in progress
+*/
+declare type compiledGraphType = [
+	compiledGraphDataType,
+	compiledLineDataType
+]
+
+declare type compiledLineDataType = {
+
+}
+
+declare type compiledGraphDataType = {
+
 }

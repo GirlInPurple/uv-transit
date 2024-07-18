@@ -25,7 +25,7 @@
                 <p>
                     This page is meant to help players, old and new, get around the server and visit other locations.
                     UVDOT, along with the <a href="https://wiki.ultravanilla.world/wiki/OPC">OPC</a> (working on <a href="https://wiki.ultravanilla.world/wiki/Outpost_Express">OPE</a>),
-                    <a href="https://niklas20114552.github.io/st-transports/">Seacrestica Transports</a> (working on UltraStar), and more,
+                    <a href="https://niklas20114552.github.io/st-transports/">Seacrestica Transports</a> (working on <a href="https://wiki.ultravanilla.world/wiki/Seacrestica_Transports#Minecart_Lines">UltraStar</a>), and more,
                     are in the process of creating transit infrastructure across the server, currently spanning just over 100KM!
                     <br>
                     More info on the transit system at large can be found <a href="/">here</a>, and a tutorial on how to use this
@@ -35,7 +35,7 @@
             </div>
             <div>
                 <p style="text-align: center;">
-                    Version 2.0.0, Last Updated 15/07/2024<sup>D/M/Y</sup><br>
+                    Version 2.0.1, Last Updated 15/07/2024<sup>D/M/Y</sup><br>
                     Changelog available <a href="https://github.com/GirlInPurple/uv-transit/blob/master/changelog.md">here</a>
                 </p>
             </div>
@@ -50,7 +50,7 @@
                                 </datalist>
                             </td>
                             <td>- From</td>
-                            <td rowspan="2">
+                            <td>
                                 <button id="flip-button">Swap</button>
                             </td>
                         </tr>
@@ -62,17 +62,20 @@
                                 </datalist>
                             </td>
                             <td>- To</td>
+														<td>
+															<button id="clear-button">Clear</button>
+														</td>
                         </tr>
                     </tbody>
                 </table>
                 <div class="margin">
-                    <details style="display: none;"><summary>Toll Preferences</summary>
-                        <select name="tolls" id="tolls" class="in-table" style="width: max-content;">
+                    <details><summary>Toll Preferences</summary>
+                        <select name="tolls" id="tolls" style="width: max-content;">
                             <option value="no-preference">Do not reroute to avoid them</option>
                             <option selected value="unless-necessary">Avoid tolls unless absolutely necessary</option>
                             <option value="avoid-tolls">Avoid tolls, period.</option>
-                        </select>
-                        <p class="small">Even if the option to avoid tolls is set, the options below override it.</p>
+                        </select><br>
+                        <input type="checkbox" checked name="have-card" id="have-card"><label for="have-card">If I have a card, allow those tolls</label><br>
                         <input type="checkbox" name="have-SeaCard" id="have-seacard"><label for="have-seacard">I have a ST SeaCard</label><br>
                         <input type="checkbox" name="have-EasyPass" id="have-easypass"><label for="have-easypass">I have a UVDOT EasyPass</label><br>
                     </details>
@@ -84,7 +87,14 @@
                         <input type="checkbox" checked name="use-minecarts" id="use-minecarts"><label for="use-minecarts">Use Minecarts</label><br>
                         <input type="checkbox" checked name="use-boatways" id="use-boatways"><label for="use-boatways">Use Boatways/Waterways</label><br>
                         <input type="checkbox" checked name="use-roadways" id="use-roadways"><label for="use-roadways">Use Roadways</label><br>
-                        <input type="number" placeholder="10" name="roads-as" id="roads-as" list="speedlist"><label for="roads-as">Road Speed (m/s)</label><br>
+
+                    </details>
+                    <details><summary>Experimental</summary>
+												<p class="small">
+													This settings allows you to change what speed Roadways will use internally.
+													This is set to 5 m/s by default, because while you can sprint continuously, on average the real number will be slightly lower.
+												</p>
+                        <input style="width: 70px" type="number" placeholder="5" name="roads-as" id="roads-as" list="speedlist"><label for="roads-as">Road Speed (m/s)</label><br>
                         <datalist id="speedlist">
                             <option value="5.6">Sprinting (5.6)</option>
                             <option value="4.3">Walking (4.3)</option>
@@ -92,19 +102,23 @@
                             <option value="9.5">Average horse speed (9.5)</option>
                             <option value="14">Max. horse speed (14.0)</option>
                         </datalist>
-                    </details>
-                    <details><summary>Experimental</summary>
                         <p class="small">
                             This option makes the router prefer AFK-able transit, like Iceways, Pistonbolts, Minecarts, etc.
                             While Iceways aren't necessarily AFK-able, you can hold down the W key with a script, mod, or a weight, so its more semi-AFK-able.
                         </p>
                         <input type="checkbox" name="large-crowd" id="large-crowd"><label for="large-crowd">Prefer AFK-able Transit</label><br>
                         <p class="small">
-                            Warps commands like /warp olympics are still active long after the event is over.
-                            This option enables some warp commands that may or may not be disabled by the time you use them.
+                            <strike>Warps commands like /warp olympics are still active long after the event is over.
+                            This option enables some warp commands that may or may not be disabled by the time you use them.</strike><br>
+
+														The commands in question have been disabled :(
                         </p>
-                        <input type="checkbox" name="use-seasonal" id="use-seasonal"><label for="use-seasonal">Use Seasonal Commands</label><br>
-                    </details>
+                        <input disabled type="checkbox" name="use-seasonal" id="use-seasonal"><label for="use-seasonal">Use Seasonal Commands</label><br>
+												<p class="small">
+                						Oh?
+            						</p>
+            						<input type="checkbox" name="use-eggs" id="use-eggs"><label for="use-eggs">Easter Eggs</label><br>
+										</details>
                     <div class="container" style="flex-direction: row;">
                         <button id="route-button">Route!</button>
                         <p style="font-size: 75%; padding: 0%; margin: 0%;">(or press Enter)</p>
@@ -130,8 +144,11 @@
         <div class="container footer">
             <p>
                 This site is not associated with the higher ups at UltraVanilla, nor Mojang AB or Microsoft Inc.
-                All in-game towns, groups, or other locations mentioned are also their own legal entity and reserve the right to ask to be added or removed from this page.
-                Please open a Github issue or contact DJzombiehunter in-game or on Discord to for removal/addition requests. Most locations have been added automatically.
+                All in-game towns, groups, or other locations mentioned are also their own legal entity and
+								reserve the right to ask to be added or removed from this page.
+                Please open a Github issue or contact <a style="color:cornflowerblue;" href="">DJzombiehunter</a>
+								or any other members of <a style="color:cornflowerblue;" href="">UVDOT</a> in-game or on Discord for requests.
+								Most locations have been added automatically.
                 Also, this site is <a style="color:cornflowerblue;" href="https://github.com/GirlInPurple/uv-transit">open-source</a>.
             </p>
         </div>

@@ -1,10 +1,9 @@
 import $ from 'jquery'
-import compileRoutingGraph from './compile'
 
 /**
  * The router function, handles everything related to pathing.
  */
-export default function internalRoute():{route: string[], graph: [any, any], path: any|null, error: [boolean, string|null], routingTime: number, graphingTime: number} {
+export default function internalRoute(processedGraph:any, renderGraph:any):{route: string[], graph: [any, any], path: any|null, error: [boolean, string|null], routingTime: number} {
 
     /**
      * @returns {{path: string[], pathTook: any|null, reachable: boolean, reason: string|null}}
@@ -119,22 +118,6 @@ export default function internalRoute():{route: string[], graph: [any, any], pat
         }
     }
 
-    let beginGraphPreprocess = performance.now()
-    let { processedGraph, renderGraph } = compileRoutingGraph(
-        //@ts-ignore
-        $("#tolls").val(),
-        $("#use-warps").is(":checked"),
-        $("#use-nether").is(":checked"),
-        $("#use-iceways").is(":checked"),
-        $("#use-pistonbolt").is(":checked"),
-        $("#use-minecarts").is(":checked"),
-        $("#use-boatways").is(":checked"),
-        $("#use-roadways").is(":checked"),
-        $("#use-seasonal").is(":checked")
-    )
-    let graphProcessTime = performance.now() - beginGraphPreprocess
-
-
     let beginAStarFn = performance.now()
     let {
         path,
@@ -154,7 +137,6 @@ export default function internalRoute():{route: string[], graph: [any, any], pat
         graph: [processedGraph, renderGraph],
         path: pathTook,
         error: [reachable, reason],
-        routingTime: AStarFnTime,
-        graphingTime: graphProcessTime
+        routingTime: AStarFnTime
     }
 }

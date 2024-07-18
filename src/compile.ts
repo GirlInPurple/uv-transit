@@ -1,17 +1,17 @@
 import $ from 'jquery'
 import { getSpeeds, routes } from './data'
 
-export default function compileRoutingGraph(
-    tollMode: string,
-    useWarps: boolean,
-    useNether: boolean,
-    useIceway: boolean,
-    usePistonbolt: boolean,
-    useRailway: boolean,
-    useBoatway: boolean,
-    useRoadway: boolean,
-    useSeasonal: boolean
-) {
+export default function compileRoutingGraph() {
+		const tollMode: string = $("#tolls").val() as string
+    const useWarps: boolean = $("#use-warps").is(":checked")
+    const useNether: boolean = $("#use-nether").is(":checked")
+    const useIceway: boolean = $("#use-iceways").is(":checked")
+    const usePistonbolt: boolean = $("#use-pistonbolt").is(":checked")
+    const useRailway: boolean = $("#use-minecarts").is(":checked")
+    const useBoatway: boolean = $("#use-boatways").is(":checked")
+    const useRoadway: boolean = $("#use-roadways").is(":checked")
+    const useSeasonal: boolean = $("#use-seasonal").is(":checked")
+
     const methods = getSpeeds()
     /**
      * Adds data to the output graphs.
@@ -30,9 +30,9 @@ export default function compileRoutingGraph(
     }
     /**
      * Calculate the weight for this route, and if the weight it in invalid number fix it by setting it to 0.
-     * 
+     *
      * @param {number[]} locationRoute
-     * 
+     *
      * @returns {number}
     */
     const weightCorrection = (locationRoute:any, methodKey:string) => {
@@ -73,38 +73,11 @@ export default function compileRoutingGraph(
                 throw new RangeError(`This method (${methodKey}) is unvalid!`)
         }
     }
-    /**
-     * Check if this route has a toll or not.
-     * 
-     * @param {any} locationRoute
-     * 
-     * @returns {[boolean, string, number, string, number]}
-    */
-    const isMethodToll = (locationRoute:any) => {
-        if (locationRoute[2] !== undefined) {
-            let toll = locationRoute[2]
-            return [
-                true,
-                toll.currency,
-                toll.price,
-                toll.pass,
-                toll.passPrice
-            ]
-        } else {
-            return [
-                false,
-                "barrier",
-                0,
-                "nullcard",
-                0
-            ]
-        }
-    }
-    
+
     let outputNodeGraph:any = {}
     let outputRenderGraph:any = {}
 
-    const compileGraph = (routes:any) => {
+    const compileGraph = (routes:routeType) => {
         for (let nodeKey in routes) {
             const node = routes[nodeKey]
             console.debug("Begin New Compilation", nodeKey, node)
@@ -116,31 +89,30 @@ export default function compileRoutingGraph(
                     const method = node[1][methodKey]
                     console.debug(method, node[1][methodKey])
                     for (let routeKey in method) {
-                        const locationRoute = method[routeKey]
+											const locationRoute = method[routeKey]
 
-                        // "Infinity" weight is technically possible, avoid that.
-                        const weight = weightCorrection(locationRoute, methodKey)
+											// "Infinity" weight is technically possible, avoid that.
+											let weight = weightCorrection(locationRoute, methodKey)
 
-                        // Handle tolls, currently disabled
-                        /*
-                        let tolls = isMethodToll(locationRoute)
-                        console.log("Before Toll Checks", tolls)
-                        if (tolls[0]) {
-                            if (tollMode === "avoid-tolls") {
-                                continue
-                            } else
-                            if (tollMode === "unless-necessary") {
-                                if ($(`#have-${tolls[3]}`)) {   // Checks if the card is whitelisted
-                                    locationRoute[0] *= 4       // If not, nuke the weight
-                                }
-                            }
-                        }
-                        console.log("After Toll Checks", tolls)
-                        */
+											// Handle tolls
 
-                        // Handle adding to the graphs
-                        setGraphs(nodeRoutes, routeKey, weight, outputRenderGraph, nodeKey, [locationRoute[0], methodKey])
-                        console.debug(`"${nodeKey}"'s ${methodKey} route to "${routeKey}" is ${locationRoute[1]} meters. Weight of ${weight}.`)
+											if (locationRoute[2] !== undefined) {
+												let toll:tollType = locationRoute[2]
+												if (tollMode === "avoid-tolls") {
+													// If told to avoid tolls, skip this iteration
+													continue;
+												} else
+												if (tollMode === "unless-necessary") {
+													// Multiply the weight by 4, discouraging this route
+													if (!$(`#have-${toll.pass}`).is(":checked")) {
+															weight *= 4
+													}
+												}
+											}
+
+											// Handle adding to the graphs
+											setGraphs(nodeRoutes, routeKey, weight, outputRenderGraph, nodeKey, [locationRoute[0], methodKey])
+											console.debug(`"${nodeKey}"'s ${methodKey} route to "${routeKey}" is ${locationRoute[1]} meters. Weight of ${weight}.`)
                     }
                 }
             }

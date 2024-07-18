@@ -4,13 +4,17 @@ This page explains all the technical info about the project, everything from the
 Below is a table of contents, I recommend reading it in this order.
 
 - [Technical Info](#technical-info)
-  - [Quick Overview](#quick-overview)
-  - [The Node Graph](#the-node-graph)
-    - [Tri-Layered Graphing](#tri-layered-graphing)
-      - [Specificity](#specificity)
-      - [Toll Counting](#toll-counting)
-  - [Compiling the graph](#compiling-the-graph)
-  - ["A\* in the night sky"](#a-in-the-night-sky)
+	- [Quick Overview](#quick-overview)
+	- [Changes in 2.x.x](#changes-in-2xx)
+		- [Nodes now have metadata](#nodes-now-have-metadata)
+		- [Lines have more data](#lines-have-more-data)
+	- [The Node Graph](#the-node-graph)
+		- [Tri-Layered Graphing](#tri-layered-graphing)
+			- [Specificity](#specificity)
+			- [Toll Counting](#toll-counting)
+	- [The Line Graph](#the-line-graph)
+	- [Compiling the graph](#compiling-the-graph)
+	- ["A\* in the night sky"](#a-in-the-night-sky)
 
 ## Quick Overview
 
@@ -21,9 +25,24 @@ The function then takes all the settings from the user, along with the location 
 It does this by calculating the weight of the node's routes, and if its lower it adds or overrides it on the output graph. A specific route can be overwritten many, many times within the same loop, with the weight going lower and lower each time. During this stage, weights can also be altered manually in either direction, up or down, depending on the factors the user chooses. This is primarily used to avoid tolls and for the alternative routing methods.\
 Also during this process, a second graph is made and being written to simultaneously. It contains the data for the renderer to use to determine what the route it, it's method, and how it should be handled with rendering.
 
-The AStar function is the part where the actual routing happens, based on the [A* pathing algorithm](https://en.wikipedia.org/wiki/A*_search_algorithm). It sends back a list of nodes and methods it followed to get this route, or an error message if one occurs. This is the simplest part of the process.
+The AStar function is the part where the actual routing happens, based on the [A\* pathing algorithm](https://en.wikipedia.org/wiki/A*_search_algorithm). It sends back a list of nodes and methods it followed to get this route, or an error message if one occurs. This is the simplest part of the process.
 
-From here, all the data from the pathing and compiling functions get passed into the rendering functions. This is a text based explanation similar to Seacrestica Transport's website's full route description, but will a bunch of extra data attached, like who owns the roads/rails/iceways, the distance between nodes, all the other nodes along it, the estimated time, etc. This section is based off [Seacrestica Transports's](https://niklas20114552.github.io/st-transports/) router, with heavy modification and only sharing code with the `secondStringify()` function.
+From here, all the data from the pathing and compiling functions get passed into the rendering functions. This is a text based explanation similar to [Seacrestica Transports's](https://niklas20114552.github.io/st-transports/) website's full route description, but will a bunch of extra data attached, like who owns the roads/rails/iceways, the distance between nodes, all the other nodes along it, the estimated time, etc.
+
+## Changes in 2.x.x
+
+I've migrated the entire site to use Typescript and a more compressed data system, so while it's going to be harder to write around with the node manager, this will be much easier to maintain and add to later on.
+
+### Nodes now have metadata
+
+As explained below in the [Node Graph](#the-node-graph) section, nodes have some metadata attached that helps the site and manager to understand what happening.\
+Along with this, all the region data held previously in the `places` variable has been merged into this metadata and is being used in the UI and Render Engines for styling.\
+The layer data is still the same.
+
+### Lines have more data
+
+Now lines have some extra data, specifically the `transfer` property, which disables the line from showing in the UI when the node that contains it tries to display all the connections to that node.\
+This is going to be replaced with a better system later on that reaches one node deeper and grabs those connections instead, as this property is meant to be used when transferring between layers.
 
 ## The Node Graph
 
@@ -31,39 +50,40 @@ Here is an example of a node:
 
 ```javascript
 const routes = {
-    // ...
-    "Outpost": [
-        [-1890764,-1894658],
-        {
-            roadways: {
-                "UV-OP-201 UV-OP-2 Intersection": [["UV-OP-2"], 1200],
+ // ...
+ Outpost: [
+  [-1890764, -1894658],
+  {
+   roadways: {
+    "UV-OP-201 UV-OP-2 Intersection": [["UV-OP-2"], 1200],
 
-                "Evergreen": [["UV-OP-1", "UV-VY"], 1200],
-                "Stonehelm": [["UV-OP-1", "UV-OP-2", "UV-VY"], 1200],
-            },
-            iceways: {
-                "Illyria": [["OPE Ouest"], 1200],
-                "Stonehelm": [["EGRK Expressway"], 1200],
-            },
-            walkways: {
-                "Outpost UltraStar Station": [
-                    ["Outpost UltraStar Station Main Entrance"], 
-                    245, 
-                    {
-                        currency: "Emerald",
-                        price: 4,
-                        pass: "SeaCard",
-                        passPrice: 2
-                    }
-                ]
-            },
-        },
-        {
-            layer: "overworld"
-        }
-    ]
-    // ...
-}
+    Evergreen: [["UV-OP-1", "UV-VY"], 1200],
+    Stonehelm: [["UV-OP-1", "UV-OP-2", "UV-VY"], 1200],
+   },
+   iceways: {
+    Illyria: [["OPE Ouest"], 1200],
+    Stonehelm: [["EGRK Expressway"], 1200],
+   },
+   walkways: {
+    "Outpost UltraStar Station": [
+     ["Outpost UltraStar Station Main Entrance"],
+     245,
+     {
+      currency: "Emerald",
+      price: 4,
+      pass: "SeaCard",
+      passPrice: 2,
+     },
+    ],
+   },
+  },
+  {
+   layer: "overworld",
+   region: "outpost",
+  },
+ ],
+ // ...
+};
 ```
 
 Lets go from top to bottom:
@@ -93,7 +113,7 @@ Now, you might be wondering what that last part was for, specifically the `layer
 
 ### Tri-Layered Graphing
 
-The graph is broken up into three layers:
+The graph is broken up into many layers:
 
 - Overworld
   - The main layer, almost everything selectable in the UI is on the layer
@@ -101,8 +121,11 @@ The graph is broken up into three layers:
   - Used by Trains, Iceways, their stations etc.
 - Nether
   - Used by nether portals and Iceways
+- The End
+  - Not used often, but means the node is in The End
 
-Pictured here is a visual example of New Spawn's tri-layer node graph. Red is Nether, Purple is Underground (specifically the Spawn Purple Iceway Line), and Green/Blue is Overworld.\
+Pictured here is a visual example of New Spawn's tri-layer node graph.\
+Red is Nether, Purple is Underground (specifically the Spawn Purple Iceway Line), and Green/Blue is Overworld.\
 Note that this is simultaneously truncated for simplicity, significantly out of date, and completely unlabeled.
 
 ![An MS Paint drawing of New Spawn's nodes](./assets/New_Spawn.png)
@@ -129,15 +152,39 @@ With the separation of the Overworld and the Stations, this was easily fixed.
 
 ![An MS Paint drawing of the UltraStar 1 and 2 lines before and after the change stated above](./assets/UltraStar_Tolls.png)
 
+## The Line Graph
+
+Handling of lines is far simpler than nodes.
+
+Here is an example of a line:
+
+```javascript
+"Ekilorea UltraStar Station Main Entrance":{
+ color:["#ab92bf","white"],
+ operator:"Seacrestica Transports Outpost",
+ altName:"Main Entrance",
+ transfer:true
+},
+```
+
+This one is easier to explain than the node:
+
+- First, the name of the line
+- The chosen colors of this line, in the order of `background-color`, and `font-color`
+- The operator, or the person(s) who own this line
+- The alternative/more accepted name of the line, take "The Voyaway" or "The Road to Roth"
+- If the line is a transfer line, meaning it transfers between 2 or more separate layers
+  - Layers are explained [here](#tri-layered-graphing)
+
 ## Compiling the graph
 
 TODO
 
-## "A* in the night sky"
+## "A\* in the night sky"
 
 This is honestly the easiest part of the process to explain.
 
 Think of a ball rolling down a hill. This ball is following a hill made out of increasingly lowering dots, the height of these dots is the distance away from the goal dot. It makes a list of the dots that it rolls over until the ball hits 0, or the bottom of this hill. At this point it gives the list of dots that it hit back, giving back the fastest possible route to a specified destination.\
-Thats the most basic explanation I've found for A*, and I forget where I heard it from, but it help me understand how it works way better.
+Thats the most basic explanation I've found for A\*, and I forget where I heard it from, but it help me understand how it works way better.
 
-If you want to read more info the A* pathing algorithm, read up on it on the [Wikipedia page](https://en.wikipedia.org/wiki/A*_search_algorithm).
+If you want to read more info the A* pathing algorithm, read up on it on the [Wikipedia page](https://en.wikipedia.org/wiki/A*\_search_algorithm).

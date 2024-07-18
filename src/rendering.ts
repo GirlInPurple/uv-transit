@@ -1,19 +1,5 @@
 import $ from 'jquery'
-import { getSpeeds, routes, methodMetadata } from './data'
-
-const transfers = [
-    // Warps
-    "Outpost Warp", "New Spawn Warp", "Old Spawn Warp",
-    // Transfers
-    "Outpost UltraStar Station Main Entrance",
-]
-
-type lineMeta = {
-    color: string[]
-    altName: string
-    operator: string
-    extraText: string
-}
+import { getSpeeds, routes, lines } from './data'
 
 type totals = {
     distance: number
@@ -37,7 +23,7 @@ export const renderRoute = (
      * so getting the distance between locations is very easy by doing this.
     */
     const getDistanceBetween = (from: string, to: string) => {
-        let searchData = routes[from][1]
+        let searchData:routesContainer = routes[from][1]
         for (let prop in searchData) {
             let locationData = searchData[prop]
             if (locationData[to] !== undefined) {
@@ -115,7 +101,7 @@ export const renderRoute = (
     const cascadeLinesBetween = (route: string[], graph: [any, any]): [[string[], [string[], string]]] => {
         //@ts-expect-error Empty array != this mess of a type
         let lineSections: [[string[], [string[], string]]] = []
-        route.forEach((location, index, array) => {
+        route.forEach((_, index, array) => {
             if (index + 1 < array.length) {
                 let line = getLineBetween(array[index], array[index + 1], graph)
                 if (
@@ -141,15 +127,22 @@ export const renderRoute = (
     /**
      * Returns the metadata for that route's primary route.
     */
-    const lineMetadata = (line: string): lineMeta => {
-        let md = methodMetadata[line]
-        return {
-            color: md.color,
-            altName: (md.altName === undefined) ? line : md.altName,
-            operator: md.operator,
-            extraText: md.extraText
-        }
+    const lineMetadata = (line: string): metadataType => {
+        return lines[line]
     }
+		/**
+		 * Gets all the lines labeled as a transfer
+		*/
+		const getTransfers = (): string[] => {
+			let transfers:string[] = []
+			for (let line in lines) {
+				let md = lines[line]
+				if (md.transfer) {
+					transfers.push(line)
+				}
+			}
+			return transfers
+		}
     /**
      * Calculates some basic totals of a route
     */
@@ -168,7 +161,7 @@ export const renderRoute = (
     const calculateConnections = (nodeName: string, existingNames: string[], graph: [any, any]): string[] => {
         let nodeData = graph[1][nodeName]
         let exceptNames: string[] = []
-        transfers.forEach((name) => { exceptNames.push(name) })
+        getTransfers().forEach((name) => { exceptNames.push(name) })
         existingNames.forEach((name) => { exceptNames.push(name) })
         // Get the lines
         let lineList: string[] = []
@@ -185,14 +178,40 @@ export const renderRoute = (
         let elementList: string[] = []
         for (let line in lineList) {
             let lineName = lineList[line]
-            if (lineName != "" || lineName != undefined) {
-                let meta:lineMeta = lineMetadata(lineName)
-                elementList.push(`<span class="line" style="background-color: ${meta.color[0]}; color: ${meta.color[1]};">${meta.altName}</span>`)
+            if (lineName !== "" || lineName !== undefined) {
+                let meta:metadataType = lineMetadata(lineName)
+                elementList.push(`<span class="line" style="background-color: ${meta.color[0]}; color: ${meta.color[1]};">${(meta.altName === undefined)?lineName:meta.altName}</span>`)
             }
         }
 
         return elementList
     }
+		//
+		const getToll = (route:[string[],[string[],string]]): tollType|undefined => {
+			let searchData:routesContainer = routes[route[0][0]][1]
+			for (let method in searchData) {
+				let conns:routeNodeType = searchData[method]
+				try {
+					let hasToll = conns[route[0][1]][2]
+					if (hasToll !== undefined) {
+						return hasToll
+					}
+				} catch (_) {}
+			}
+		}
+		//
+		const getExtraText = (route:[string[],[string[],string]]): string|undefined => {
+			let searchData:routesContainer = routes[route[0][0]][1]
+			for (let method in searchData) {
+				let conns:routeNodeType = searchData[method]
+				try {
+					let hasText = conns[route[0][1]][3]
+					if (hasText !== undefined) {
+						return hasText
+					}
+				} catch (_) {}
+			}
+		}
     /**
      * @param {number} weight - The weight of the route, also the number of seconds that route will take. (meters / meters-per-second = seconds)
      *
@@ -223,7 +242,7 @@ export const renderRoute = (
         )
     }
     /**
-     * Returns a human-readable distance. Uses Kilometeres past 1000 blocks.
+     * Returns a human-readable distance. Uses Kilometers past 1000 blocks.
     */
     const distanceStringify = (meters: number): string => {
         if (meters >= 1000) {
@@ -235,14 +254,17 @@ export const renderRoute = (
     /**
      *
     */
-    const statusRender = (totals: totals, error: [boolean, string | null], milliseconds: number) => {
+    const statusRender = (totals: totals, error: [boolean, string | null], milliseconds: number, route:string[]) => {
         console.debug(error, statusInjection, routeInjection)
 
         if (error !== undefined && !error[0]) {
             statusInjection.text(`There was an issue making the route: ${error[1]}`)
         } else {
+						let from = route[0]
+						let to = route[route.length - 1]
             statusInjection.text(`
-                Arriving ${secondStringify(totals.time)} and traveling ${distanceStringify(totals.distance)}.
+								Going from ${from} to ${to},
+                arriving ${secondStringify(totals.time)} and traveling ${distanceStringify(totals.distance)}.
                 Route created in ${milliseconds}ms
             `)
         }
@@ -252,7 +274,7 @@ export const renderRoute = (
      * @param {string[]} route
      * @param {[any, any]} graph
     */
-    const textRender = (lines: [[string[], [string[], string]]], route: string[], graph: [any, any]) => {
+    const render = (lines: [[string[], [string[], string]]], route: string[], graph: [any, any]) => {
         const flavorText = {
             // Up to 10 texts in each category
             keepGoing: [
@@ -342,7 +364,8 @@ export const renderRoute = (
             to: string,
             operator: string,
             method: string,
-            extraText: string
+            extraText: string|undefined,
+						toll: tollType|undefined
         ) => {
             // Handling for the extra nodes
             let nodeText = ""
@@ -353,12 +376,12 @@ export const renderRoute = (
                 otherNodes.forEach((node, index) => {
 
                     let connections = calculateConnections(node, realNames, graph)
-                    //@ts-ignore
-                    let speed = getSpeeds()[method]
+                    //@ts-expect-error doesnt like how this is grabbing the data
+                    let speed:number = getSpeeds()[method]
                     if (connections.length === 0) {
                         nodes.push(`
                         <p>
-                            <span class="station">${node}</span><br>
+                            <span class="station ${routes[node][2]?.region}">${node}</span><br>
                             ${distanceStringify(distances[index])}; ${secondStringify(distances[index] / speed)}
                         </p>
                         <br>
@@ -366,7 +389,7 @@ export const renderRoute = (
                     } else {
                         nodes.push(`
                         <p>
-                            <span class="station">${node}</span><br>
+                            <span class="station ${routes[node][2]?.region}">${node}</span><br>
                             ${distanceStringify(distances[index])}; ${secondStringify(distances[index] / speed)}<br>
                             Connections to ${connections.map(node => `${node}`).join(" ")}
                         </p>
@@ -379,11 +402,11 @@ export const renderRoute = (
             // Handling for the "Via..." section
             let lines: string[] = []
             routeNames.forEach((name, index) => {
-                if (name.length !== 0) {
-                    lines.push(`
-                        <span class="line" style="background-color: ${colors[index][0]}; color: ${colors[index][1]};">${name}</span>
-                    `)
-                }
+							if (name !== undefined && name.length !== 0) {
+								lines.push(`
+									<span class="line" style="background-color: ${colors[index][0]}; color: ${colors[index][1]};">${name}</span>
+								`)
+							}
             })
             let via = ""
             if (lines.length > 0) {
@@ -398,7 +421,21 @@ export const renderRoute = (
 
             // Handling for the extraText section
             let instructionText = (extraText !== undefined) ?
-                `<p>${extraText}</p><br>` :
+                `
+								Extra Information:
+								<p>${extraText}</p>
+								<br>
+								`:
+                ""
+
+            // Handling for the extraText section
+            let tollElement = (toll !== undefined) ?
+                `
+								This route has a toll.<br>
+								<p class="inline">Amount:</p> <span class="line ${toll.currency}">${toll.price} ${toll.currency}</span><br>
+								<p class="inline">With a </p><span class="line ${toll.pass}">${toll.pass}</span><p class="inline">:</p> <span class="line ${toll.currency}">${toll.passPrice} ${toll.currency}</span><br>
+								<br>
+								`:
                 ""
 
             // Handling for styles
@@ -420,14 +457,15 @@ export const renderRoute = (
 
             inject.append(`
                 <div class="route-box" style="border-color: ${colors[0][0]}; border-left-style: ${borderStyle};">
-                    From <span class="station">${from}</span><br>
+                    From <span class="station ${routes[from][2]?.region}">${from}</span><br>
                     ${via} ${lines.map(line => `${line}`).join("")}
                     ${oper}<br>
                     <p>Travel ${distance} ${time}</p>
                     <br>
+										${tollElement}
                     ${instructionText}
                     ${nodes.map(node => `${node}`).join("")}
-                    To <span class="station">${to}</span>
+                    To <span class="station ${routes[to][2]?.region}">${to}</span>
                 </div>
                 <br>
             `)
@@ -435,36 +473,42 @@ export const renderRoute = (
 
         const inject = $("#output-injection")
         // Add the new routes
-        lines.forEach((route, index, array) => {
+        lines.forEach((route) => {
             let nodes = route[0]
             let from = nodes[0]
             let to = nodes[nodes.length - 1]
             let otherNodes = nodes.slice(1, nodes.length - 1);
 
-            let lineData: lineMeta[] = []
+						//@ts-expect-error [] != this mess of nested lists
+            let lineData: [[metadataType,string]] = []
             route[1][0].forEach((line) => {
-                lineData.push(lineMetadata(line))
+                lineData.push([lineMetadata(line),line])
             })
 
             let colorData: string[][] = []
             let nameData: string[] = []
             lineData.forEach((line) => {
-                colorData.push(line.color)
-                nameData.push(line.altName)
+                colorData.push(line[0].color)
+                nameData.push(
+									((line[0].altName === undefined)?
+									line[1]:
+									line[0].altName)
+								)
             })
-
+						console.log(route)
             addLine(
-                colorData,
-                nameData,
-                route[1][0],
-                distanceStringify(cascadeDistanceBetween(route[0])),
-                secondStringify(cascadeTimeBetween(route[0], graph)),
-                otherNodes,
-                from,
-                to,
-                lineData[0].operator,
-                route[1][1],
-                lineData[0].extraText
+							colorData,
+							nameData,
+							route[1][0],
+							distanceStringify(cascadeDistanceBetween(route[0])),
+							secondStringify(cascadeTimeBetween(route[0], graph)),
+							otherNodes,
+							from,
+							to,
+							lineData[0][0].operator,
+							route[1][1],
+							getExtraText(route),
+							getToll(route)
             )
         })
         inject.css("display", "block")
@@ -474,10 +518,10 @@ export const renderRoute = (
     const routeInjection = $("#output-injection")
     let cascadedLines = cascadeLinesBetween(route, graph)
     let totals = calculateTotals(cascadedLines, route, graph)
-    statusRender(totals, error, (graphingTime + routingTime))
+    statusRender(totals, error, (graphingTime + routingTime), route)
     $("#output-injection").empty()
-    //@ts-ignore Something broke here, no clue why
-    if (lines.length !== 0) { textRender(cascadedLines, route, graph) }
+		//@ts-expect-error It doesnt like how the length check is written, no clue why
+    if (cascadedLines.length !== 0) { render(cascadedLines, route, graph) }
 }
 
 /**
